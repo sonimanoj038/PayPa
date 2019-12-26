@@ -47,7 +47,7 @@ const ForgotPassScreen= ({ navigation })=> {
    
    <Image source={require('../img/paya-text.png')} style ={{}}/>
 <Mytext></Mytext><Mytext></Mytext>
-<Item  rounded style ={{backgroundColor:'#23528b',width:'75%'}} >
+<Item  rounded style ={styles.InputItem} >
 <Image source={require('../img/call3.png')} />
             <Input placeholder='Enter Call Number' placeholderTextColor="#dce0e6" style = {{color:'white'}} keyboardType="numeric"  />
           </Item>
@@ -92,7 +92,13 @@ const styles = StyleSheet.create({
     fontSize:18,
     backgroundColor: Colors.white,
   },
- 
+  InputItem:{
+
+    backgroundColor:'#23528b',
+    width:'80%',
+    borderColor:'#23528b',
+  
+   }
 });
 
 
