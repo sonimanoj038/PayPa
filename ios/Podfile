@@ -38,6 +38,12 @@ target 'FirstProject' do
 
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
+  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
+
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'FirstProjectTests' do
     inherit! :search_paths
     # Pods for testing

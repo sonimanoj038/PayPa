@@ -24,13 +24,15 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import { Container, Radio, Text,Right, Left,Input,Icon,Item ,Button, Footer} from 'native-base';
+
 import LoginScreen from './src/screens/LoginScreen'
 import ChangePassword from './src/screens/ChangePassword'
 import ChangePin from './src/screens/ChangePin'
 import RegistrationScreen from './src/screens/RegistrationScreen'
 
+import QRCode from './src/screens/QRCode'
 import SplashScreen from 'react-native-splash-screen'
+import ScannerScreen from './src/screens/ScannerScreen'
 
 export default class App extends React.Component{
 
