@@ -5,13 +5,27 @@ import {
   FlatList,
     View,
   Image,
-   StyleSheet ,StatusBar
+   StyleSheet ,StatusBar,ScrollView
   } from 'react-native';
+import {  } from 'react-native-gesture-handler';
   const data = [{"name":"manoj"}]
 export default class TimelineView extends Component {
-  render() {
+  constructor(props){
+
+    super(props);
+
+this.state ={
+
+
+loading:false
+}
+
+}
+render() {
+    const { navigation } = this.props;
+   
     return (
-        
+      <ScrollView style={{flex:1}}>
       <Container>
 
         <Header  style={{backgroundColor:'#1c4478'}}>
@@ -28,27 +42,27 @@ export default class TimelineView extends Component {
           
           </Right>
         </Header>
-      
-        <View style={{flex:1,padding:10}}>
-   
-   <Image source = { require('../img/sample.jpg') } style={styles.imageView} />
+        
+        <View style={{padding:10}}>
+       
+   <Image source = { {uri:"https://www.markupdesigns.org/paypa/"+navigation.getParam('pic')} } style={styles.imageView} />
 <View style={{flexDirection:'row'}}>
-<Text style = {{fontSize:26,fontFamily:'Roboto',padding:10}}>Amazono Medical Store</Text>
-    <Icon name='md-heart'  style={{color:'#ff992b',fontSize:30,padding:15}}/></View>
+<Text style = {{fontSize:26,fontFamily:'Roboto',padding:10}}>{navigation.getParam('name')}</Text>
+    <Icon name='md-heart'  style={{color:'#e26d0e',fontSize:30,padding:15}}/></View>
    
 <View style={{flexDirection:'column',paddingVertical:5}}>
 
  <View style ={{flexDirection:'row',padding:10}}> 
   <Icon name='md-pin'  style={{color:'black',fontSize:35,}}/>
  
- <Text style ={{fontSize:15,padding:5}}>A-16, Lohia Rd, A Block, Sector 63, Noida, Uttar </Text>
+ <Text style ={{fontSize:15,padding:5}}>{navigation.getParam('address')} </Text>
 
  </View>
 
  <View style ={{flexDirection:'row',padding:10}}> 
  <Icon active name='md-phone-portrait' style ={{color:"black",fontSize:35}}/>
  
- <Text style ={{fontSize:15,padding:5}}>+91555588822</Text>
+ <Text style ={{fontSize:15,padding:5}}>{navigation.getParam('mobile')}</Text>
  </View>
  <View style ={{flexDirection:'row',padding:10}}> 
  <Icon active name='md-time' style ={{color:"black",fontSize:35}}/>
@@ -59,7 +73,7 @@ export default class TimelineView extends Component {
  <View style ={{flexDirection:'column'}}>
 
  <Item regular>
-            <Input placeholder='Weekdays' placeholderTextColor="#a9b2ba" style={{borderBottomColor:'#c6c9cc',borderBottomWidth:1,width:'90%'}} />
+            <Input placeholder='Weekdays' placeholderTextColor="#a9b2ba" style={{borderBottomColor:'#c6c9cc',borderBottomWidth:1,width:'90%'}} value = {navigation.getParam('busiDays')}/>
           </Item>
           <Item regular >
             <Input placeholder='Weekends' placeholderTextColor="#a9b2ba" style={{borderBottomColor:'#c6c9cc',borderBottomWidth:1}} />
@@ -78,8 +92,9 @@ export default class TimelineView extends Component {
 </View>
 
  </View>
-        
+ 
       </Container>
+      </ScrollView>
     );
   }
 }

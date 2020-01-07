@@ -26,29 +26,29 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { Container, Radio,Right,Text, Left,Input,Item ,Button, Footer, Content} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Mytext from '../component/Mytext';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import SignupScreen from '../screens/SignupScreen';
+import Mytext from '../Component/Mytext';
+
 
 
 
 const ForgotPassScreen= ({ navigation })=> {
     
   return (
-    <ImageBackground  source={require('../img/splash.png')}  style={{ flex: 1,
+    <ImageBackground  source={require('../../img/common/splash.png')}  style={{ flex: 1,
       justifyContent: "center",
       width: null,
       height: null,}} >
  <View style ={{ 
       alignItems: 'center',}}>
 
- <Image source={require('../img/logo.png')} />
-   
-   <Image source={require('../img/paya-text.png')} style ={{}}/>
+<Image source={require('../../img/logo/login3x.png')} style={{maxHeight:200,resizeMode: 'contain'}} />
+
+
+
+
 <Mytext></Mytext><Mytext></Mytext>
 <Item  rounded style ={styles.InputItem} >
-<Image source={require('../img/call3.png')} />
+<Image source={require('../../img/common/call21.png')} />
             <Input placeholder='Enter Call Number' placeholderTextColor="#dce0e6" style = {{color:'white'}} keyboardType="numeric"  />
           </Item>
           <Mytext></Mytext>
@@ -65,7 +65,7 @@ justifyContent:'center',paddingVertical:30,
   alignItems: 'center',
   //Here is the trick
  }}>
-  <Mytext style = {{color:'#dce0e6',fontSize:11,paddingVertical:2}}> Already have an acount?</Mytext>
+  <Mytext style = {{color:'#dce0e6',fontSize:11,paddingVertical:2,paddingHorizontal:3}}> Already have an acount?</Mytext>
   <TouchableOpacity onPress ={()=> navigation.navigate('Login')}>
       <Mytext style = {{color:'#dce0e6',fontSize:13}}>Login Now</Mytext></TouchableOpacity>
 </View>

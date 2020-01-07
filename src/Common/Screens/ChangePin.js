@@ -20,7 +20,7 @@ import {
 
 import { Container, Radio,Right,Text, Left,Input,Item ,Button, Footer,Header,Body,Title, Content,CheckBox} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Mytext from '../component/Mytext';
+import Mytext from '../Component/Mytext';
 
 
 

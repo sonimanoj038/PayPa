@@ -8,21 +8,24 @@
 
 import React from 'react';
 import {
+  // @ts-ignore
   SafeAreaView,
   StyleSheet,
+  // @ts-ignore
   ScrollView,
   View,
   TouchableOpacity,
-  StatusBar,Image,
-  TouchableWithoutFeedback
+  StatusBar,Image,Platform,
+  TouchableWithoutFeedback,PermissionsAndroid
 } from 'react-native';
 
 
+// @ts-ignore
 import { Container, Radio,Right,Text, Left,Input,Item ,Button, Footer,Header,Body,Title, Content,CheckBox} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Mytext from '../component/Mytext';
+import Mytext from '../../Common/Component/Mytext';
 import DocumentPicker from 'react-native-document-picker';
-
+import Geolocation from '@react-native-community/geolocation';
 
 
 export default class RegistrationScreen extends React.Component {
@@ -37,7 +40,9 @@ export default class RegistrationScreen extends React.Component {
     this.state ={
 
 term:false,
-name:''
+name:'',
+currentLongitude: 'unknown',//Initial Longitude
+    currentLatitude: 'unknown'
     }
 }
 
@@ -67,6 +72,74 @@ name:''
   }
 
 }
+componentDidMount = () => {
+  var that =this;
+  //Checking for the permission just after component loaded
+  if(Platform.OS === 'ios'){
+    this.callLocation(that);
+  }else{
+    async function requestLocationPermission() {
+      try {
+        const granted = await PermissionsAndroid.request(
+          // @ts-ignore
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,{
+            'title': 'Location Access Required',
+            'message': 'This App needs to Access your location'
+          }
+        )
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          //To Check, If Permission is granted
+          that.callLocation(that);
+        } else {
+          alert("Permission Denied");
+        }
+      } catch (err) {
+        // @ts-ignore
+        alert("err",err);
+        console.warn(err)
+      }
+    }
+    requestLocationPermission();
+  }    
+ }
+ callLocation(that){
+  //alert("callLocation Called");
+  Geolocation.getCurrentPosition(
+      //Will give you the current location
+       (position) => {
+          const currentLongitude = JSON.stringify(position.coords.longitude);
+          //getting the Longitude from the location json
+          const currentLatitude = JSON.stringify(position.coords.latitude);
+          //getting the Latitude from the location json
+          that.setState({ currentLongitude:currentLongitude });
+          //Setting state Longitude to re re-render the Longitude Text
+          that.setState({ currentLatitude:currentLatitude });
+          //Setting state Latitude to re re-render the Longitude Text
+       },
+       (error) => alert(error.message),
+       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+    that.watchID = Geolocation.watchPosition((position) => {
+      //Will give you the location on location change
+        console.log(position);
+        const currentLongitude = JSON.stringify(position.coords.longitude);
+        //getting the Longitude from the location json
+        const currentLatitude = JSON.stringify(position.coords.latitude);
+        //getting the Latitude from the location json
+       that.setState({ currentLongitude:currentLongitude });
+       //Setting state Longitude to re re-render the Longitude Text
+       that.setState({ currentLatitude:currentLatitude });
+       //Setting state Latitude to re re-render the Longitude Text
+    });
+ }
+ componentWillUnmount = () => {
+  // @ts-ignore
+  Geolocation.clearWatch(this.watchID);
+ }
+
+
+
+
 
 
     render(){
@@ -85,6 +158,7 @@ name:''
         </Header>
  <Content  >
 <Text></Text>
+
 <Item  regular style ={styles.InputItem} >
 
      <Input placeholder='First Name' placeholderTextColor="#797b7d" style = {{color:'#797b7d'}} />
@@ -118,15 +192,23 @@ name:''
     <Text style={{fontSize:13,fontWeight:'bold'}}>3 months Bank statments</Text>
     </View>
     <View style={{ flexDirection:'row',justifyContent:"space-around",paddingHorizontal:10,paddingVertical:5}}>
-        <TouchableOpacity style = {{backgroundColor:'white',backgroundColor:'white',paddingHorizontal:30,paddingVertical:20}}
+        <TouchableOpacity style = {{backgroundColor:'white',
+
+        backgroundColor:'white',paddingHorizontal:30,paddingVertical:20}}
         onPress ={this.getFile}
         >
-            <Image source={require('../img/upload3.png')} />
-            <Text style ={{fontSize:11,fontWeight:'600',color:'#686e6a',textAlign:'center'}}>{this.state.name.name ? this.state.name.name.substring(0,15) : ''}</Text> 
+            <Image source={require( '../../img/common/upload3.png')} />
+            <Text style ={{fontSize:11,fontWeight:'600',color:'#686e6a',textAlign:'center'}}>{this.state.name.
+
+            name ? this.state.name.name.substring(0,15) : ''}</Text> 
             </TouchableOpacity>
            
-            <TouchableOpacity style = {{backgroundColor:'white',backgroundColor:'white',paddingHorizontal:30,paddingVertical:20}}>
-            <Image source={require('../img/upload3.png')} />
+            <TouchableOpacity style = {{backgroundColor:'white',
+// @ts-ignore
+            backgroundColor:'white',paddingHorizontal:30,paddingVertical:20}}>
+            <Image source={require(
+// @ts-ignore
+            '../../img/common/upload3.png')} />
             </TouchableOpacity>
     </View>
 
@@ -137,11 +219,15 @@ name:''
     </View>
     <View style={{ flexDirection:'row',justifyContent:"space-around",paddingHorizontal:10,paddingVertical:5}}>
         <TouchableOpacity style = {{backgroundColor:'white',paddingHorizontal:30,paddingVertical:20}}>
-            <Image source={require('../img/upload3.png')} />
+            <Image source={require(
+// @ts-ignore
+            '../../img/common/upload3.png')} />
             </TouchableOpacity>
     
             <TouchableOpacity style = {{backgroundColor:'white',paddingHorizontal:30,paddingVertical:20}}>
-            <Image source={require('../img/upload3.png')} />
+            <Image source={require(
+// @ts-ignore
+            '../../img/common/upload3.png')} />
             </TouchableOpacity>
     </View>
     <Text></Text>
@@ -162,7 +248,9 @@ name:''
         this.state.term} onPress ={()=>{this.setState({term:!this.state.term})}} color ='#575a5e'/><Text style = {{color:'#9ca0a6',paddingHorizontal:15}}>Term & Condition</Text>
      </View>
 </Content>
-<Footer style = {{color:'#dce0e6',
+<Footer style = {{
+// @ts-ignore
+color:'#dce0e6',
   backgroundColor:'#e46c0b'}}>
 <TouchableWithoutFeedback onPress= {()=>this.props.navigation.navigate('timeline')}>
             <Text style = {{color:'white',fontFamily:'Roborto ',fontSize:18,fontWeight:'800',padding:15}}>SUBMIT NOW</Text>
