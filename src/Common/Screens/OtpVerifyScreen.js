@@ -12,9 +12,8 @@ import {
   StyleSheet,
   ScrollView,
   View,
-  TouchableOpacity,
-  StatusBar,Image,Easing,
-  ImageBackground ,Animated,
+ ActivityIndicator,
+  ImageBackground ,TouchableOpacity 
 } from 'react-native';
 
 import {
@@ -33,6 +32,7 @@ import VirtualKeyboard from 'react-native-virtual-keyboard';
 
 
 
+
 export default class OtpVerifyScreen extends React.Component {
 
 
@@ -48,15 +48,93 @@ export default class OtpVerifyScreen extends React.Component {
   otp:'',
   verifyInput:true,
   verifyInput2:true,
+  loading:false,
+  loadingResend:false
  
   }
   
   }
   changeText(newText) {
     this.setState({otp: newText});
+    
 }
+
+verifyOtp = async()=>{
+  this.setState({loading:true})
+  const {otp }  = this.state ;
+  let id = this.props.navigation.state.params.id;
+  let formdata = new FormData();
+  formdata.append("otp",otp);
+  formdata.append("id",id);
+
+  await fetch('https://www.markupdesigns.org/paypa/api/verifyOTP', {
+    method: 'POST',
+    headers: {
+     'Content-Type': 'multipart/form-data',
+    },
+    body: formdata
+   
+  }).then((response) => response.json())
+        .then((responseJson) => {
+         
+          console.log("OTP repsonse " + JSON.stringify(responseJson))
+          this.setState({loading:false})
+          if(responseJson.status ==="Failure"){
+            alert(responseJson.msg)
+          }
+          else
+              this.props.navigation.navigate('Login')
+            }).catch((error) => {
+          console.error(error);
+        });
+    }
+    
+    closeActivityIndicator = () => setTimeout(() => this.setState({
+      loadingResend: false }), 3000)
+
+
+
+    ResendOtp = async() =>{
+ this.setState({loadingResend:true})
+  this.closeActivityIndicator();
+      let id = this.props.navigation.state.params.id;
+      let call= this.props.navigation.state.params.call;
+      let pin = this.props.navigation.state.params.pin;
+      let type = this.props.navigation.state.params.type;
+    
+      let formdata = new FormData();
+      formdata.append("mobile",call);
+      formdata.append("pin",pin);
+      formdata.append("type",type);
+      formdata.append("type",id);
+    
+      await fetch('https://www.markupdesigns.org/paypa/api/registration', {
+        method: 'POST',
+        headers: {
+         'Content-Type': 'multipart/form-data',
+        },
+        body: formdata
+       
+      }).then((response) => response.json())
+            .then((responseJson) => {
+    console.log("OTP repsonse " + JSON.stringify(responseJson))
+              this.props.navigation.navigate('Login')
+     
+       
+            }).catch((error) => {
+              console.error(error);
+            });
+       
+       
+       
+    
+    }
+
+
   render(){
     
+
+  
   return (
     <ImageBackground  source={require('../../img/common/splash.png')}  style={{ flex: 1,
       justifyContent: "center",
@@ -65,9 +143,9 @@ export default class OtpVerifyScreen extends React.Component {
  <View style ={{ 
       alignItems: 'center'}}>
 
- <Text style = {{color:'white',fontSize:20,fontFamily:'sans-serif-light'}}> Verify Your Number !</Text>
- <Text style = {{color:'white',fontSize:15,fontFamily:'sans-serif-light'}}> We have sent an OTP on number</Text>
- <Text style = {{color:'white',fontSize:15,fontFamily:'sans-serif-light'}}> +1 99915478555</Text>
+  <Text style = {{color:'white',fontSize:20,fontFamily: 'Roboto-Light'}}> Verify Your Number !</Text>
+  <Text style = {{color:'white',fontSize:15,fontFamily: 'Roboto-Light'}}> We have sent an OTP on </Text>
+  <Text style = {{color:'white',fontSize:15,fontFamily: 'Roboto-Light'}}>  {this.props.navigation.state.params.call}</Text>
 <Mytext></Mytext>
 <View   style ={styles.InputItem} >
 
@@ -75,8 +153,15 @@ export default class OtpVerifyScreen extends React.Component {
           </View>
           <Mytext></Mytext>
 
-
-          <Text style = {{color:'white',fontSize:15,fontFamily:'sans-serif-light'}}> RESEND OTP?</Text>
+<TouchableOpacity onPress = {this.ResendOtp}>
+{this.state.loadingResend?<ActivityIndicator
+               animating = {this.state.loadingResend}
+               color = 'white'
+               size={"small"}
+               style ={{paddingHorizontal:50,alignItems:'center',width:'100%'}}
+              />:
+          <Text style = {{color:'white',fontSize:14,fontFamily: 'Roboto-Light'}}> RESEND OTP?</Text>}
+          </TouchableOpacity>
           <Mytext></Mytext>
          
 <View  style = {{padding:10,backgroundColor:'#8da2c9',opacity:0.2,borderRadius:20,borderWidth:0.5,borderColor:'#23528b'}}>
@@ -86,8 +171,13 @@ export default class OtpVerifyScreen extends React.Component {
          
           <Mytext></Mytext>
           <Mytext></Mytext>
-          <Button  rounded light style ={{paddingHorizontal:50,alignItems:'center',width:'75%'}}>
-            <Mytext  style ={{color:'#1c4478',textAlign:"center",width:'100%',fontWeight:'700'}}>LOGIN</Mytext>
+          <Button  rounded light style ={{paddingHorizontal:50,alignItems:'center',width:'75%'}} onPress = {this.verifyOtp}>
+          {this.state.loading?<ActivityIndicator
+               animating = {this.state.loading}
+               color = '#1c4478'
+               size={"large"}
+               style ={{paddingHorizontal:50,alignItems:'center',width:'100%'}}
+              />:<Mytext  style ={{color:'#1c4478',textAlign:"center",width:'100%',fontWeight:'700'}}>LOGIN</Mytext>}
           </Button>
 
         

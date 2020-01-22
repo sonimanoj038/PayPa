@@ -6,8 +6,8 @@ import {View,
   AppRegistry,
   StyleSheet,
  StatusBar,
-  TouchableOpacity,BackHandler,Dimensions,
-  Linking,TouchableWithoutFeedback
+  TouchableOpacity,BackHandler,Dimensions,Image,
+  Linking,TouchableHighlight
 } from 'react-native';
  
 import QRCodeScanner from 'react-native-qrcode-scanner';
@@ -16,7 +16,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import { NavigationActions, StackActions,withNavigationFocus } from 'react-navigation';
 
- class ScannerScreen extends React.Component {
+export default class AfterPayScreen extends React.Component {
 
 
     constructor(props){
@@ -31,97 +31,71 @@ scan:false
     }
 }
 
-onSuccess = (e) => {
-//  let mydata= e.data
-//   this.setState({
-//     result: mydata,
-    
-// })
 
-this.props.navigation.navigate('pay',{
-
-
-  id:e.data
-})
-    // const check = e.data.substring(0, 4);
-    
-    // this.setState({
-    //     result: e,
-    //     scan: false,
-    //     ScanResult: true
-    // })
-    // if (check === 'http') {
-    //     Linking
-    //         .openURL(e.data)
-    //         .catch(err => console.error('An error occured', err));
-
-
-    // } else {
-        
-    
-
-}
-scanAgain = () => {
-    this.setState({
-        scan: true,
-        ScanResult: false
-    })
-
-}
   render() {
-  
+    const { navigation } = this.props;
     return (
-        <Container style = {{flex:1,backgroundColor:'#e8edf1'}}>
-        <Header  style={{backgroundColor:'#1c4478'}}>
+        <Container style = {{backgroundColor:'#1c4478',}}>
+        <Header  style={{backgroundColor:'#1c4478'}} noShadow>
             <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
               <Left>
               <Icon name='md-arrow-back'  style={{color:'white',fontSize:25}}/>
               </Left>
               <Body  >
-              <Title >Scan & Pay</Title>
+              <Title  style={{left:50}}>Paid</Title>
               </Body>
              
             </Header>
-     <Content >
-   
     
-                      {this.props.isFocused?
+   <View style={{alignItems:'center',flexDirection:'column',flex:1,}}>
+  
+  
+<View style={{padding:30,justifyContent:'center'}}>
+<Image source={require('../../img/user/paid.png')} style={{maxHeight:130,resizeMode: 'contain',}} />
+<Text style ={{color:'white', fontFamily:'Roboto-Light',fontSize:35,textAlign:'center'}}>
+         Success!
+        </Text>
+        </View>
+        <View style={{padding:30}}>
+        <Text style ={{color:'white', fontFamily:'Roboto-Light',fontSize:16,}}>
+         You have just paid
+        </Text>
+        <View style={{flexDirection:"row",padding:10}}>
+        <Text style ={{color:'white', fontFamily:'Roboto-Light',fontSize:22,}}>
+        R 
+        </Text>
+        <Text style ={{color:'white', fontFamily:'Roboto-Light',fontSize:30,}}>
+       250.50
+        </Text>
+        </View>
 
-<QRCodeScanner
-                            reactivate={true}
-                            showMarker={true}
-                            ref={(node) => { this.scanner = node }}
-                            onRead={this.onSuccess}
-                            
-                            // bottomContent={
-                            //     <View>
-                                   
-                            //         <TouchableOpacity style={styles.buttonTouchable} onPress={() => this.setState({ scan: false })}>
-                            //             <Text style={styles.buttonTextStyle}>Cancel</Text>
-                         
-                            //         </TouchableOpacity>
-                            //     </View>
+</View>
+   
+        <TouchableHighlight
+      style = {{
+        borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
+        width: Dimensions.get('window').width * 0.25,
+        height: Dimensions.get('window').width * 0.25,
+        backgroundColor:'transparent',
+        justifyContent: 'center',
+        borderColor:'white',
+        borderWidth:1,
+        alignItems: 'center'
+      }}
+      underlayColor = '#ccc'
+      onPress = { () => alert('Yaay!') }
+    >
+      <Text style ={{color:'white', fontFamily:'Roboto-Light',fontSize:30,}} > OK </Text>
+    </TouchableHighlight>
 
-                            // }
-                        />
 
-                      :null}  
-                    
-                     {this.state.ScanResult &&
+
+
+   </View>
+     
+ 
                       
-                           
-                            <View style={this.state.ScanResult ? styles.scanCardView : styles.cardView}>
-                                <Text>Type : {this.state.result.type}</Text>
-                                <Text>Result : {this.state.result.data}</Text>
-                                <Text numberOfLines={1}>RawData: {this.state.result.rawData}</Text>
-                                <TouchableOpacity onPress={this.scanAgain} >
-                                    <Text>Click to Scan again!</Text>
-                                </TouchableOpacity>
-
-                            </View>
-                       
-                    }
-    </Content>
+   
     {/* <Footer style = {{color:'#dce0e6',
       backgroundColor:'#e46c0b'}}>
     <TouchableWithoutFeedback onPress= {this.onScan}>
@@ -208,4 +182,3 @@ cardView: {
 },
 });
  
-export default withNavigationFocus(ScannerScreen)

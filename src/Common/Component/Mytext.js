@@ -12,5 +12,5 @@ import {
 
 export default Mytext = (props)=>{
 
-    return  <Text {...props} style={[{fontFamily: 'Roboto, Thin'}, props.style]}>{props.children}</Text>
+    return  <Text {...props} style={[{fontFamily: 'Roboto-Light'}, props.style]}>{props.children}</Text>
 }

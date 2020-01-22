@@ -16,14 +16,17 @@ export default class TimelineView extends Component {
 
 this.state ={
 
-
+img:['img'],
 loading:false
 }
 
 }
 render() {
     const { navigation } = this.props;
-   
+   const pic  = navigation.getParam('pic');
+   const pic1 = JSON.parse(pic)
+
+  
     return (
       <ScrollView style={{flex:1}}>
       <Container>
@@ -31,7 +34,7 @@ render() {
         <Header  style={{backgroundColor:'#1c4478'}}>
         <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
           <Left>
-          <Icon name='md-arrow-back'  style={{color:'white',fontSize:25}} onPress ={()=> this.props.navigation.navigate('timeline')}/>
+          <Icon name='md-arrow-back'  style={{color:'white',fontSize:25}} onPress ={()=>{this.props.navigation.goBack()}}/>
           </Left>
           <Body style={{justifyContent:'center',alignItems:'center'}}>
             <Title >Details</Title>
@@ -45,7 +48,15 @@ render() {
         
         <View style={{padding:10}}>
        
-   <Image source = { {uri:"https://www.markupdesigns.org/paypa/"+navigation.getParam('pic')} } style={styles.imageView} />
+   <Image source = { {uri:"https://www.markupdesigns.org/paypa/"+pic1[0]} } style={styles.imageView} />
+
+   <View style = {{flexDirection:'row',padding:10}}>
+{pic1.map((item)=>{
+  return <Image source = { {uri:"https://www.markupdesigns.org/paypa/"+item} } style={{width:70,height:70,backgroundColor:'green',margin:10}} />
+})}
+</View>
+ 
+
 <View style={{flexDirection:'row'}}>
 <Text style = {{fontSize:26,fontFamily:'Roboto',padding:10}}>{navigation.getParam('name')}</Text>
     <Icon name='md-heart'  style={{color:'#e26d0e',fontSize:30,padding:15}}/></View>

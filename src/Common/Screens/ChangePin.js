@@ -56,20 +56,20 @@ term:false
 <Text></Text>
 <Item  regular style ={styles.InputItem} >
 
-     <Input placeholder='Old pin' placeholderTextColor="#797b7d" style = {{color:'#797b7d'}} />
+     <Input placeholder='Old pin' placeholderTextColor="#797b7d" style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}}/>
           </Item>
 
           <Mytext></Mytext>
           
           <Item  regular style ={styles.InputItem} >
 
-     <Input placeholder='New Pin' placeholderTextColor="#797b7d" style = {{color:'#797b7d'}} />
+     <Input placeholder='New Pin' placeholderTextColor="#797b7d" style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
           </Item>
 
           <Mytext></Mytext>
           <Item  regular style ={styles.InputItem} >
 
-<Input placeholder='Confirm Pin' placeholderTextColor="#797b7d" style = {{color:'#797b7d'}} />
+<Input placeholder='Confirm Pin' placeholderTextColor="#797b7d"style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
      </Item>
           <Mytext></Mytext>
           

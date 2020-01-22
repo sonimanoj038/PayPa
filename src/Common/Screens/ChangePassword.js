@@ -24,7 +24,7 @@ import Mytext from '../Component/Mytext';
 
 
 
-export default class ChangePassword extends React.Component {
+export default class BChangePin extends React.Component {
    
 
     
@@ -48,7 +48,7 @@ term:false
           <Icon name='md-arrow-back'  style={{color:'white',fontSize:25}}/>
           </Left>
           <Body  >
-          <Title >Change Paasword</Title>
+          <Title >Change Pin</Title>
           </Body>
          
         </Header>
@@ -56,20 +56,20 @@ term:false
 <Text></Text>
 <Item  regular style ={styles.InputItem} >
 
-     <Input placeholder='Old password' placeholderTextColor="#797b7d" style = {{color:'#797b7d'}} />
+     <Input placeholder='Old pin' placeholderTextColor="#797b7d" style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
           </Item>
 
           <Mytext></Mytext>
           
           <Item  regular style ={styles.InputItem} >
 
-     <Input placeholder='New Password' placeholderTextColor="#797b7d" style = {{color:'#797b7d'}} />
+     <Input placeholder='New Pin' placeholderTextColor="#797b7d" style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
           </Item>
 
           <Mytext></Mytext>
           <Item  regular style ={styles.InputItem} >
 
-<Input placeholder='Confirm Password' placeholderTextColor="#797b7d" style = {{color:'#797b7d'}} />
+<Input placeholder='Confirm Pin' placeholderTextColor="#797b7d" style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
      </Item>
           <Mytext></Mytext>
           

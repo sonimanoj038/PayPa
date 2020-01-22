@@ -16,9 +16,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 
 
-export default class QrCodeScreen extends React.Component {
+export default class BNotification extends React.Component {
 
+    static navigationOptions = {
 
+        tabBarIcon: ({ tintColor }) => (
+            <Icon name="md-notifications-outline" style={{ color: tintColor,fontSize:30 }} />
+        )
+    }
     constructor(props){
 
         super(props);
@@ -31,27 +36,13 @@ term:false
     render(){
   return (
    
- <Container  >
-    <Header  style={{backgroundColor:'white'}} noShadow>
+ <Container >
+    <Header  style={{backgroundColor:'#1c4478'}}>
         <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
-          <Left>
-          <Icon name='md-arrow-back'  style={{color:'#1c4478',fontSize:25}}/>
-          </Left>
-          <Body  >
-          <Title >My QR Code</Title>
-          </Body>
-         
+        <Text style = {{alignSelf:'center',color:'white',fontSize:18,fontFamily:'Roboto-Medium'}}>Notifications </Text>
         </Header>
  <View style = {styles.body}>
-<View style = {styles.qrcode}>
 
-<QRCode
- size = {200}
-      value="http://markupdesigns.info/paypa/index.html"
-      style ={{justifyContent:'center',alignSelf:'center',padding:20}}
-    />
-
-</View>
  
 
  </View>
@@ -70,8 +61,7 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent:'center',
     alignItems:'center',
-  
-  
+   
     fontSize:18,
   },
  InputItem:{
@@ -81,12 +71,6 @@ const styles = StyleSheet.create({
   borderColor:'white',
 alignSelf:'center',
 borderRadius:8
- },
- qrcode:{
-  borderWidth:1,
-  borderColor:'grey',
-  padding:15,
-
  }
 });
 

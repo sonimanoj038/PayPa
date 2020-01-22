@@ -31,8 +31,22 @@ import Mytext from '../Component/Mytext';
 
 
 
-const ForgotPassScreen= ({ navigation })=> {
+export default class ChangePassword extends React.Component {
+   
+
     
+
+  constructor(props){
+
+      super(props);
+ 
+  this.state ={
+
+term:false,
+mobile:''
+  }
+}
+  render(){
   return (
     <ImageBackground  source={require('../../img/common/splash.png')}  style={{ flex: 1,
       justifyContent: "center",
@@ -49,7 +63,9 @@ const ForgotPassScreen= ({ navigation })=> {
 <Mytext></Mytext><Mytext></Mytext>
 <Item  rounded style ={styles.InputItem} >
 <Image source={require('../../img/common/call21.png')} />
-            <Input placeholder='Enter Call Number' placeholderTextColor="#dce0e6" style = {{color:'white'}} keyboardType="numeric"  />
+<Input placeholderTextColor="#edf0ed" style = {{color:'#edf0ed',fontFamily: 'Roboto-Light',fontSize:15}}
+            onChangeText={mobile => this.setState({mobile})}
+            keyboardType="numeric" placeholder='Enter Call Number' maxLength={10} />
           </Item>
           <Mytext></Mytext>
           
@@ -66,7 +82,7 @@ justifyContent:'center',paddingVertical:30,
   //Here is the trick
  }}>
   <Mytext style = {{color:'#dce0e6',fontSize:11,paddingVertical:2,paddingHorizontal:3}}> Already have an acount?</Mytext>
-  <TouchableOpacity onPress ={()=> navigation.navigate('Login')}>
+  <TouchableOpacity onPress ={()=> this.props.navigation.navigate('Login')}>
       <Mytext style = {{color:'#dce0e6',fontSize:13}}>Login Now</Mytext></TouchableOpacity>
 </View>
 <Mytext>
@@ -81,6 +97,7 @@ justifyContent:'center',paddingVertical:30,
  </ImageBackground>
 
   );
+}
 };
 
 const styles = StyleSheet.create({
@@ -103,4 +120,4 @@ const styles = StyleSheet.create({
 
 
 
-export default ForgotPassScreen
+

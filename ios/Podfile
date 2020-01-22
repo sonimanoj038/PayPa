@@ -46,6 +46,8 @@ target 'FirstProject' do
 
   pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
 
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
   target 'FirstProjectTests' do
     inherit! :search_paths
     # Pods for testing

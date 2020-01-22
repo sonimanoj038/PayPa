@@ -65,7 +65,7 @@ else if(callNo.length<10){
   toastr.showToast("Enter  Valid Call Number")
   return false
 }
-else if (callNo === callConf)
+else if (callNo !== callConf)
 {
 
   toastr.showToast("Call Number Does not Match")
@@ -91,7 +91,7 @@ UserSignupFunction = async() =>{
 
   const {pin }  = this.state ;
   const { callNo }  = this.state ;
-  const {type}   = this.state;
+  const type   = this.props.navigation.state.params.type;
   let formdata = new FormData();
   formdata.append("mobile",callNo);
   formdata.append("pin",pin);
@@ -106,8 +106,22 @@ if(this.validateInput()){
    
   }).then((response) => response.json())
         .then((responseJson) => {
-   this.setState({loading:false})
-         Alert.alert(JSON.stringify(responseJson))
+          let data = responseJson['data']['id']
+          
+
+console.log("signup Response"+ JSON.stringify(responseJson))
+this.setState({loading:false})
+          this.props.navigation.navigate('OtpVerifiy',{ msg:responseJson.msg,
+            call:this.state.callNo,
+            pin:this.state.pin,
+            id:data,
+            type:this.props.navigation.state.params.type
+            })
+
+           
+        
+   
+ 
    
         }).catch((error) => {
           console.error(error);
@@ -136,39 +150,42 @@ if(this.validateInput()){
  
 
 
-          <Mytext></Mytext>
+    <Mytext></Mytext>
           
           <Item  rounded style ={styles.InputItem} >
           <Image source={require('../../img/common/call21.png')} />
-            <Input placeholder='Enter Call Number' placeholderTextColor="#a8ada9"
+          <Input placeholderTextColor="#edf0ed" style = {{color:'#edf0ed',fontFamily: 'Roboto-Light',fontSize:15}}
              onChangeText={callNo => this.setState({callNo})}
-            secureMytextEntry style={{color:'white'}} keyboardType="numeric"  maxLength={10}/>
+            keyboardType="numeric" placeholder='Enter Call Number' maxLength={10} />
+            
           </Item>
 
           <Mytext></Mytext>
          
           <Item  rounded style ={styles.InputItem} >
           <Image source={require('../../img/common/call21.png')} />
-            <Input placeholder='Enter Call Number' placeholderTextColor="#a8ada9"
+            <Input placeholder='Enter Call Number' 
+            placeholderTextColor="#edf0ed" style = {{color:'#edf0ed',fontFamily: 'Roboto-Light',fontSize:15}}
              onChangeText={callConf => this.setState({callConf})}
-            style = {{color:'white'}} keyboardType="numeric"  maxLength={10}/>
+            keyboardType="numeric"  maxLength={10}/>
           </Item>
           <Mytext></Mytext>
           <Item  rounded style ={styles.InputItem} >
           <Image source={require('../../img/common/login21.png')} />
-            <Input placeholder='Enter Pin' placeholderTextColor="#a8ada9"
+            <Input placeholder='Enter Pin' 
+            placeholderTextColor="#edf0ed" style = {{color:'#edf0ed',fontFamily: 'Roboto-Light',fontSize:15}}
              onChangeText={pin => this.setState({pin})}
-            style = {{color:'white'}} keyboardType="numeric" secureTextEntry={true} maxLength={5}/>
+           keyboardType="numeric" secureTextEntry={true} maxLength={5}/>
           </Item>
 
           <Mytext>
 </Mytext>
 <Item  rounded style ={styles.InputItem} >
           <Image source={require('../../img/common/login21.png')} />
-            <Input placeholder='Enter Pin' placeholderTextColor="#a8ada9"
-            
+            <Input placeholder='Enter Pin' 
+            placeholderTextColor="#edf0ed" style = {{color:'#edf0ed',fontFamily: 'Roboto-Light',fontSize:15}}
             onChangeText={pinConf => this.setState({pinConf})}
-            style = {{color:'white'}} keyboardType="numeric" secureTextEntry={true} maxLength={5}/>
+            keyboardType="numeric" secureTextEntry={true} maxLength={5}/>
           </Item>
 <Mytext></Mytext>
           <Button  rounded light style ={{paddingHorizontal:50,alignItems:'center',width:'75%'}}
@@ -215,6 +232,7 @@ const styles = StyleSheet.create({
   backgroundColor:'#23528b',
   width:'80%',
   borderColor:'#23528b',
+
 
  }
 });
