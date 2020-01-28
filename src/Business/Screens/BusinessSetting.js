@@ -87,7 +87,7 @@ term:false
           <ListItem  style = {{backgroundColor:'#f2dece',padding:0}} >
             
             <Left>
-              <Text style= {{color:'#5c391b',fontSize:14}}>Delete Account</Text>
+              <Text style= {{color:'#5c391b',fontSize:14}}>Deactivate Account</Text>
             </Left>
             <Right>
               <Icon name="md-arrow-forward"  style={{fontSize:20}}/>
@@ -197,6 +197,13 @@ term:false
           </ListItem>
 
             </List>
+            <Text>
+
+            </Text>
+            <Button block  style = {{width:'95%',justifyContent:'center',alignItems:'center',alignSelf:'center', backgroundColor:'#e46c0b'}} onPress = {()=>  this.props.navigation.navigate('Login')}>
+            <Text style = {{color:'white',fontFamily:'System',fontSize:18,fontWeight:'700'}}>LOGOUT</Text>
+          </Button>
+          <Text></Text>
         </Content>
 
         </ScrollView>

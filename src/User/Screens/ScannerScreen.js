@@ -6,16 +6,21 @@ import {View,
   AppRegistry,
   StyleSheet,
  StatusBar,
-  TouchableOpacity,BackHandler,Dimensions,
+  TouchableOpacity,BackHandler,Dimensions,FlatList,ImageBackground,
   Linking,TouchableWithoutFeedback
 } from 'react-native';
  
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import { Container, Radio,Right,Text, Left,Input,Item ,Button, Footer,Header,Body,Title, Content,CheckBox} from 'native-base';
+import { Container, Radio,Right,Text, Left,Input,Item ,Button, Footer,Header,Body,Title, Content,CheckBox,Thumbnail } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { NavigationActions, StackActions,withNavigationFocus } from 'react-navigation';
-
+const myitems = [{"key": "r", "image": require("../../img/user/sample1.jpg")},
+   {"key": "b", "image": require("../../img/user/sample2.jpg")},
+   {"key": "j", "image": require("../../img/user/sample3.jpg")},
+   {"key": "h", "image": require("../../img/user/sample3.jpg")},
+   {"key": "k", "image": require("../../img/user/sample1.jpg")}
+ ];
  class ScannerScreen extends React.Component {
 
 
@@ -83,44 +88,61 @@ scanAgain = () => {
              
             </Header>
      <Content >
-   
+    
     
                       {this.props.isFocused?
 
 <QRCodeScanner
+
+markerStyle = {styles.markStyle}
                             reactivate={true}
                             showMarker={true}
                             ref={(node) => { this.scanner = node }}
                             onRead={this.onSuccess}
-                            
-                            // bottomContent={
-                            //     <View>
+                            topContent={ <View>
                                    
-                            //         <TouchableOpacity style={styles.buttonTouchable} onPress={() => this.setState({ scan: false })}>
-                            //             <Text style={styles.buttonTextStyle}>Cancel</Text>
+                                    
+                              <Text style={{color:'white',fontSize:18,fontFamily:'Roboto-Medium',padding:10}}>Scan PayPa QR Code</Text>
+               
                          
-                            //         </TouchableOpacity>
-                            //     </View>
+                      </View> }
+                            bottomContent={
+                                <View>
+                                   
+                                    
+                                        <Text style={{color:'white',fontSize:18,fontFamily:'Roboto-Medium',padding:10}}>Scan PayPa QR Code</Text>
+                         
+                                   
+                                </View>
 
-                            // }
+                            }
                         />
 
                       :null}  
                     
-                     {this.state.ScanResult &&
-                      
-                           
-                            <View style={this.state.ScanResult ? styles.scanCardView : styles.cardView}>
-                                <Text>Type : {this.state.result.type}</Text>
-                                <Text>Result : {this.state.result.data}</Text>
-                                <Text numberOfLines={1}>RawData: {this.state.result.rawData}</Text>
-                                <TouchableOpacity onPress={this.scanAgain} >
-                                    <Text>Click to Scan again!</Text>
-                                </TouchableOpacity>
+                     
+<View style = {{paddingTop:20}}>
+<Text style={{fontSize:18,fontFamily:'Roboto-Medium',padding:10}}>Recent Payments</Text>
+<FlatList
+          data={myitems}
+          
+          renderItem={({ item,index }) => (
+            <View style={{  flex:1,padding:10}}>
+             
+               {/* <Image name="md-close" source={require('../../img/logo/logo.png')} style={{ height:40, width:40, backgroundColor:'#FF0000'}} onPress={()=>{this.deleteItem(index)}}/> */}
+              {/* <ImageBackground style={styles.imageThumbnail} source={{ uri: item.path }} /> */}
+              <Thumbnail large source={item.image} />
 
-                            </View>
-                       
-                    }
+             
+            </View>
+          )}
+          //Setting the number of column
+          numColumns={4}
+          extraData={this.state.images}
+          keyExtractor={(item, index) => index.toString()}
+        />
+</View>
+
     </Content>
     {/* <Footer style = {{color:'#dce0e6',
       backgroundColor:'#e46c0b'}}>
@@ -166,46 +188,12 @@ const styles = StyleSheet.create({
 alignSelf:'center',
 borderRadius:8
  },
- scanCardView: {
-    width: deviceWidth - 32,
-    height: deviceHeight / 2,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderRadius: 2,
-    borderColor: '#ddd',
-    borderBottomWidth: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 4,
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 10,
-    backgroundColor: 'white'
-},
-cardView: {
-    width: deviceWidth - 32,
-    height: deviceHeight / 2,
-    alignSelf: 'center',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderRadius: 2,
-    borderColor: '#ddd',
-    borderBottomWidth: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 4,
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 10,
-    backgroundColor: 'white'
-},
+ markStyle:{
+
+  borderColor:'#1c4478',
+  borderWidth:2
+
+ }
 });
  
 export default withNavigationFocus(ScannerScreen)

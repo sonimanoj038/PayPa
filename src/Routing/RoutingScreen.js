@@ -90,7 +90,9 @@ UploadBusiness:UploadBusiness,
 Welcome:WelcomeAgain,
 Bset:BusinessSetting,
 paynow:PaymentScreen,
-UWallet:UWallet
+UWallet:UWallet,
+Scanner:ScannerScreen
+
 
 
 
@@ -101,6 +103,7 @@ UWallet:UWallet
            headerMode: 'none',
             navigationOptions: {
                 headerVisible: false,
+                
             },
           })
   const UserStack = createStackNavigator({
@@ -234,7 +237,7 @@ UWallet:UWallet
 
 
   const AddPostStack = createStackNavigator({
-    UAddPost:UAddPost,
+
     BAddPost:BAddPost
 
    

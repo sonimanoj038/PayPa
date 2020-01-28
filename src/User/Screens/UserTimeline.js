@@ -3,7 +3,7 @@ import { Container, Header, Content, Footer, FooterTab, Button, Text, Badge ,Rig
 
 
 import AddPost from '../../Business/Screens/BAddPost';
-import Setting from '../../Business/Screens/BSetting';
+
 import Notification from '../../Business/Screens/BNotification';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer } from 'react-navigation';
@@ -24,7 +24,7 @@ import {
 
  export default class UserTimline extends React.Component {
     static navigationOptions = {
-
+      tabBarVisible:true,
         tabBarIcon: ({ tintColor }) => (
             <Icon name="md-home" style={{ color:tintColor,fontSize:30 }} />
         )

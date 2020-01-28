@@ -43,10 +43,11 @@ export default class ChangePassword extends React.Component {
   this.state ={
 
 term:false,
-mobile:''
+callNo:''
   }
 }
   render(){
+    const {navigate} =this.props.navigation;
   return (
     <ImageBackground  source={require('../../img/common/splash.png')}  style={{ flex: 1,
       justifyContent: "center",
@@ -70,7 +71,12 @@ mobile:''
           <Mytext></Mytext>
           
           <Mytext></Mytext>
-          <Button  rounded light style ={{paddingHorizontal:50,alignItems:'center',width:'75%'}}>
+          <Button  rounded light style ={{paddingHorizontal:50,alignItems:'center',width:'75%'}} onPress ={()=> navigate('OtpVerifiy',{
+            call:this.state.callNo,
+           
+            id:'1',
+            type:this.props.navigation.state.params.type
+            })}>
             <Mytext  style ={{color:'#1c4478',textAlign:"center",width:'100%',fontWeight:'700'}}>Submit</Mytext>
           </Button>
 

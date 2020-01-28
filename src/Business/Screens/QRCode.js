@@ -35,7 +35,7 @@ term:false
     <Header  style={{backgroundColor:'white'}} noShadow>
         <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
           <Left>
-          <Icon name='md-arrow-back'  style={{color:'#1c4478',fontSize:25}}/>
+          <Icon name='md-arrow-back'  style={{color:'#1c4478',fontSize:25,paddingLeft:10}} onPress = {()=>  this.props.navigation.goBack()}/>
           </Left>
           <Body  >
           <Title >My QR Code</Title>

@@ -68,7 +68,7 @@ validateInput = ()=>{
   const { lname }  = this.state ;
   const { mobile}  = this.state ;
   const { dateSalary }  = this.state ;
-  const { password }  = this.state ;
+  const {term }  = this.state ;
   const { email }  = this.state ;
   const { doc1}  = this.state ;
   const { doc2}  = this.state ;
@@ -128,9 +128,9 @@ else if (dateSalary ==="")
   return false
 
 }
-else if (password ==="")
+else if (term ===false)
 {
-  toastr.showToast("Enter password")
+  toastr.showToast("Please accept Term & Condition")
   return false
 
 }
@@ -263,7 +263,7 @@ const {userid} = this.state
   formdata.append("sname",sname);
   formdata.append("email",email);
   formdata.append("dateSalary",dateSalary);
-  formdata.append("pass",password);
+ 
   formdata.append('doc1',
   {uri:this.state.doc1 , name: this.state.doc1name, type: 'application/pdf'}
     
@@ -319,7 +319,7 @@ const {userid} = this.state
     <Header  style={{backgroundColor:'#1c4478'}}>
         <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
           <Left>
-          <Icon name='md-arrow-back'  style={{color:'white',fontSize:25}}/>
+         
           </Left>
           <Body  >
           <Title > User Registration</Title>
@@ -463,12 +463,7 @@ style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
 style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
      </Item>
      <Text></Text>
-     <Item  regular style ={styles.InputItem} >
-
-<Input placeholder='Paasword' placeholderTextColor="#797b7d" 
- onChangeText={(password)=>this.setState({password})}
-style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
-     </Item>
+ 
 
      <View style = {{flexDirection:'row',paddingHorizontal:20,paddingVertical:10}}>
 

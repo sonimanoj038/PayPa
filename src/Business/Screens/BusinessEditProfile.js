@@ -292,7 +292,7 @@ const {userid} = this.state
     <Header  style={{backgroundColor:'#1c4478'}}>
         <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
           <Left>
-          <Icon name='md-arrow-back'  style={{color:'white',fontSize:22}}/>
+          <Icon name='md-arrow-back'  style={{color:'white',fontSize:22,paddingLeft:10}} onPress = {()=>  this.props.navigation.goBack()}/>
           </Left>
           <Body  >
           <Text style = {{color:'white',fontSize:18,fontFamily:''}}> Edit Registration </Text>

@@ -52,7 +52,7 @@ render() {
 
    <View style = {{flexDirection:'row',padding:10}}>
 {pic1.map((item)=>{
-  return <Image source = { {uri:"https://www.markupdesigns.org/paypa/"+item} } style={{width:70,height:70,backgroundColor:'green',margin:10}} />
+  return <Image source = { {uri:"https://www.markupdesigns.org/paypa/"+item} } style={{width:70,height:70,backgroundColor:'#bfbcbb',margin:10}} />
 })}
 </View>
  

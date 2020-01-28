@@ -319,7 +319,7 @@ const {userid} = this.state
     <Header  style={{backgroundColor:'#1c4478'}}>
         <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
           <Left>
-          <Icon name='md-arrow-back'  style={{color:'white',fontSize:25}}/>
+          <Icon name='md-arrow-back'  style={{color:'white',fontSize:25,paddingLeft:10}} onPress = {()=>  this.props.navigation.goBack()}/>
           </Left>
           <Body  >
           <Title > Edit User Profile</Title>

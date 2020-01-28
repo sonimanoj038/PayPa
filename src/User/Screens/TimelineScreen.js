@@ -173,7 +173,7 @@ handleLoadMore = () => {
         <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
          
          
-          <Text style = {{alignSelf:'center',color:'white',fontSize:18,fontWeight:'bold'}}>Business List </Text>
+          <Text style = {{alignSelf:'center',color:'white',fontSize:18,fontWeight:'bold'}}>Businesses </Text>
          
       
         </Header>

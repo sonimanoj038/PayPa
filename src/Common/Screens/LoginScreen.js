@@ -238,7 +238,7 @@ UserLoginFunction = async() =>{
         
  <ScrollView style={{flex: 1}}>
    <View style={{ justifyContent:'center',alignItems:'center'}}>
- <Image source={require('../../img/logo/login3x.png')} style={{maxHeight:200,resizeMode: 'contain'}} />
+ <Image source={require('../../img/logo/splash_logo3x.png')} style={{maxHeight:150,resizeMode: 'contain'}} />
 
 <View style ={{flexDirection:"row",paddingVertical:20}}>
 <Radio selected={this.state.selected1} style ={{paddingHorizontal:5,fontSize:5}} color="#acafb5" selectedColor	="#a8ada9"
@@ -291,7 +291,7 @@ onPress ={()=>this.setState({type:0,selected2:false,selected1:true})}
   <Mytext style = {{color:'#dce0e6',fontSize:11,paddingVertical:3}}> Don't have an acount?</Mytext>
   <TouchableOpacity onPress ={()=> navigate('Signup',{type:this.state.type})}><Mytext style = {{color:'#dce0e6',fontSize:13,padding:2,paddingHorizontal:3}}>Sign Up Now</Mytext></TouchableOpacity>
 </View>
-<TouchableOpacity onPress ={()=> navigate('pass')} style={{
+<TouchableOpacity onPress ={()=> navigate('pass',{type:this.state.type})} style={{
   height: 50,
   
   justifyContent: 'center',
@@ -299,7 +299,7 @@ onPress ={()=>this.setState({type:0,selected2:false,selected1:true})}
   position: 'relative', //Here is the trick
   bottom: 0,}} >
 <Mytext  style = {{color:'#dce0e6',fontSize:11,
-  bottom:0,paddingVertical:20}}> Forgot Password?</Mytext>
+  bottom:0,paddingVertical:20}}> Forgot Pin?</Mytext>
 
 </TouchableOpacity>
 

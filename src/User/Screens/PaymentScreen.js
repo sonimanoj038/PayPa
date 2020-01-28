@@ -72,7 +72,7 @@ amount:''
 </View>
 <View style={{ alignItems:'center',flex:4}}>             
         <Item  rounded style ={[styles.inputitem,{borderColor:"#23528b"}]}   >
-<Image source={require('../../img/common/call21.png')} />
+<Image source={require('../../img/common/payment-r.png')} />
 
             <Input placeholderTextColor="#23528b" style = {{color:'#23528b',fontFamily: 'Roboto-Medium',fontSize:18}}
            onChangeText={(amount)=>this.setState({amount})}

@@ -116,6 +116,11 @@ else if (doc4 ==="")
   toastr.showToast("Upload Business Bank Account")
   return false
 
+}else if (this.state.term ===false)
+{
+  toastr.showToast("Accept Term & condtion ")
+  return false
+
 }
 
 else
@@ -290,7 +295,7 @@ const {userid} = this.state
     <Header  style={{backgroundColor:'#1c4478'}}>
         <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
           <Left>
-          <Icon name='md-arrow-back'  style={{color:'white',fontSize:22}}/>
+          
           </Left>
           <Body  >
           <Text style = {{color:'white',fontSize:18,fontFamily:''}}> Business Registration </Text>

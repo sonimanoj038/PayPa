@@ -42,10 +42,10 @@ term:false
   return (
    
  <Container style = {{flex:1,backgroundColor:'#e8edf1'}}>
-    <Header  style={{backgroundColor:'#1c4478'}}>
+    <Header  style={{backgroundColor:'#1c4478'}}> 
         <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
           <Left>
-          <Icon name='md-arrow-back'  style={{color:'white',fontSize:25}}/>
+          <Icon name='md-arrow-back'  style={{color:'white',fontSize:25,paddingLeft:10}} onPress = {()=>  this.props.navigation.goBack()}/>
           </Left>
           <Body  >
           <Title >Change Pin</Title>

@@ -47,7 +47,7 @@ componentWillUnmount() {
 
 
 handleBackPress = () => {
-  this.props.navigation.goBack();
+  this.props.navigation.navigate('User');
   return true
 }
 
