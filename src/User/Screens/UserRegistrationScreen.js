@@ -56,7 +56,7 @@ currentLongitude: 'unknown',//Initial Longitude
     doc4name:'',
     doc3:'',
     doc4:''
-    ,userid:'',
+    ,userid:'',msg:'',
     
     Alert_Visibility:false
     }
@@ -135,15 +135,15 @@ else if (term ===false)
 
 }
 else
-this.setState({loading:true})
+
 return true;
 }
 
 
 
-Show_Custom_Alert(visible) {
+Show_Custom_Alert(data) {
  
-  this.setState({Alert_Visibility: visible});
+  this.setState({Alert_Visibility: true,msg:data});
   
 }
 
@@ -272,7 +272,10 @@ const {userid} = this.state
   formdata.append("doc3", {uri:this.state.doc3 , name: this.state.doc3name, type: 'application/pdf'});
   formdata.append("doc4", {uri:this.state.doc4 , name: this.state.doc4name, type: 'application/pdf'});
   formdata.append("uid",userid);
+
   if(this.validateInput()){
+    if(this.state.dateSalary >= 8000){
+      this.setState({loading:true})
   await fetch('https://www.markupdesigns.org/paypa/api/addEditProfile', {
     method: 'POST',
     headers: {
@@ -289,13 +292,10 @@ const {userid} = this.state
          if(responseJson.status === 'Success')
          {
           this.Show_Custom_Alert();
-       
-             this.props.navigation.navigate('Uregister')
-          
         
           }
             
-  
+        
          
          else{
   
@@ -305,7 +305,11 @@ const {userid} = this.state
         }).catch((error) => {
           console.warn(error);
         });
-
+      }
+      else{
+let msg = " You are not eligble beacuse your income is less then R8000. "
+        this.Show_Custom_Alert(msg);
+      }
       }
     }
 
@@ -318,12 +322,11 @@ const {userid} = this.state
   
     <Header  style={{backgroundColor:'#1c4478'}}>
         <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
-          <Left>
          
-          </Left>
-          <Body  >
-          <Title > User Registration</Title>
-          </Body>
+        
+          <Text style = {{alignSelf:'center',color:'white',fontSize:18,fontFamily:'Roboto-Medium'}}>User Registration</Text>
+         
+       
          
         </Header>
         <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
@@ -345,9 +348,9 @@ const {userid} = this.state
                 <View style={styles.Alert_Main_View}>
  
  
-                    <Text style={styles.Alert_Title}>Registration Successfull </Text>
+                    {this.state.msg?<Text style={styles.Alert_Title}>Opps!! </Text>:<Text style={styles.Alert_Title}>Registration Successfull </Text>}
  
-                    <Text style={styles.Alert_Message}> Your Accout will be verify shortly </Text>
+                    {this.state.msg? <Text style={styles.Alert_Message}> {this.state.msg}</Text>:<Text style={styles.Alert_Message}> Your Accout will be verify shortly </Text>}
                   
                   
                 </View>
@@ -357,7 +360,7 @@ const {userid} = this.state
      onPress={this.ok_Button} 
      activeOpacity={0.7} 
      >
-     <Text style={styles.TextStyle}> Let's Start </Text>
+    {this.state.msg?<Text style={styles.TextStyle}> OK</Text>:<Text style={styles.TextStyle}> Let's Start</Text>}
  </TouchableOpacity>
 
 </View>
@@ -394,14 +397,22 @@ style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
 
 <Input placeholder='Mobile/Phone' placeholderTextColor="#797b7d" 
  onChangeText={(mobile)=>this.setState({mobile})}
+ keyboardType="numeric"
+ maxLength={10}
 style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
      </Item>
 
           <Mytext>
-
-
 </Mytext>
+<Item  regular style ={styles.InputItem} >
 
+<Input placeholder='Net Income After Deductions' placeholderTextColor="#797b7d"
+ onChangeText={(dateSalary)=>this.setState({dateSalary})}
+ keyboardType="numeric"
+ maxLength={8}
+style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
+     </Item>
+     <Text></Text>
 <View style = {{flexDirection:'row',justifyContent:"space-around",paddingHorizontal:10}}>
     <Text style={{fontSize:11,fontFamily: 'Roboto-Medium'}}>Certified ID Copy</Text>
     <Text style={{fontSize:11,fontFamily: 'Roboto-Medium'}}>3 months Bank statments</Text>
@@ -456,13 +467,7 @@ style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
             </TouchableOpacity>
     </View>
     <Text></Text>
-    <Item  regular style ={styles.InputItem} >
-
-<Input placeholder='Date of Salary' placeholderTextColor="#797b7d"
- onChangeText={(dateSalary)=>this.setState({dateSalary})}
-style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
-     </Item>
-     <Text></Text>
+   
  
 
      <View style = {{flexDirection:'row',paddingHorizontal:20,paddingVertical:10}}>
@@ -538,8 +543,8 @@ Alert_Title:{
  
 Alert_Message:{
  
-    fontSize: 18, 
-    color: "black",
+    fontSize: 16, 
+   
     textAlign: 'center',
     padding: 10,
     height: '35%',

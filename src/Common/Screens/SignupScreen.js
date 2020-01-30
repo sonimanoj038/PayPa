@@ -38,13 +38,15 @@ export default class SignupScreen extends React.Component{
 
 this.state ={
 
-type:0,
+type:'0',
 callNo:null,
 callConf:null,
 pin:null,
 pinConf:null,
 pin:'',
-loading:false
+loading:false,
+selected1:true,
+selected:false,
 }
 }
 
@@ -91,7 +93,7 @@ UserSignupFunction = async() =>{
 
   const {pin }  = this.state ;
   const { callNo }  = this.state ;
-  const type   = this.props.navigation.state.params.type;
+  const { type }  = this.state ;
   let formdata = new FormData();
   formdata.append("mobile",callNo);
   formdata.append("pin",pin);
@@ -145,13 +147,25 @@ this.setState({loading:false})
         <ScrollView style={{flex: 1}}>
  <View style = {{alignItems:'center',justifyContent:'center'}}>
     <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
- <Image source={require('../../img/logo/login3x.png')}  style={{maxHeight:200,resizeMode: 'contain'}}/>
+    <Text></Text>
+ <Image source={require('../../img/logo/logo-login.png')}  style={{maxHeight:170,resizeMode: 'contain'}}/>
    
  
 
 
     <Mytext></Mytext>
-          
+    <View style ={{flexDirection:"row",paddingVertical:5}}>
+<Radio  selected={this.state.selected1} style ={{paddingHorizontal:5,fontSize:5}} color="#acafb5" selectedColor	="#a8ada9"
+onPress ={()=>this.setState({type:0,selected2:false,selected1:true})}
+
+/>
+<Mytext style = {{color:'#edf0ed',paddingVertical:4,fontSize:13}}>User</Mytext>
+<Text style={{paddingHorizontal:5}}></Text>
+<Radio radioBtnSize={15} selected={this.state.selected2} style ={{paddingHorizontal:5}} radioBtnSize={5} color="#acafb5" selectedColor	="#a8ada9" onPress ={()=>this.setState({type:1,selected1:false,selected2:true})}/>
+
+<Mytext style = {{color:'#edf0ed',paddingVertical:4,fontSize:13}}>Business</Mytext>
+
+</View>   
           <Item  rounded style ={styles.InputItem} >
           <Image source={require('../../img/common/call21.png')} />
           <Input placeholderTextColor="#edf0ed" style = {{color:'#edf0ed',fontFamily: 'Roboto-Light',fontSize:15}}

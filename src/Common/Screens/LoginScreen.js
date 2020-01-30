@@ -20,11 +20,11 @@ import {
 
 import AsyncStorage from '@react-native-community/async-storage';
 import { Container, Radio,Right,Text, Left,Input,Item ,Button, Toast, Content} from 'native-base';
-
+import { StackActions, NavigationActions } from 'react-navigation';
 import Mytext from '../Component/Mytext';
 
-
-
+import {onSignIn} from '../../Routing/RoutingScreen'
+const USER_KEY = "true";
 const { height } = Dimensions.get('window');
  export default class LoginScreen extends React.Component {
   
@@ -46,12 +46,13 @@ mydata:[],
 errormsg:'',
 showToast:false,
 Alert_Visibility: false,
-msg:'here is my alert',
+msg:'',
 disabledMobile:false,
 disablepin:false,
 isDisable:true
 }
 this.handleMobileChange= this.handleMobileChange.bind(this)
+this.getIsLogin();
 }
 
 handleMobileChange(e){
@@ -99,6 +100,29 @@ else
 this.setState({loading:true,disabled:false})
 return true;
 }
+
+getIsLogin(){
+  let that = this;
+  try {
+    AsyncStorage.getItem(USER_KEY).then(function(val){
+      console.log("this is value from prefrence", val);
+      if(JSON.parse(val)){
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({ routeName: 'Welcome' })],
+        });
+        that.props.navigation.dispatch(resetAction);
+   
+      }
+    
+    });
+   } catch (error) {
+     console.log("error", error);
+     // Error retrieving data
+   }
+}
+
+
 UserLoginFunction = async() =>{
   
   const {pin }  = this.state ;
@@ -120,15 +144,23 @@ UserLoginFunction = async() =>{
   
  }).then((response) => response.json())
        .then((responseJson) => {
+         
       console.log("dataaa" + JSON.stringify(responseJson))  
   this.setState({loading:false,mydata:responseJson})
 
         if(responseJson.status === 'Success')
          {
-          let data = responseJson['data']['id']  
+          onSignIn()
+          let data = responseJson['data']['id']
+          let name = responseJson['data']['name'] 
+          let mobile = responseJson['data']['mobile'] 
+          let type = responseJson['data']['type']   
           let Process = responseJson['data']['status']  
+         
           AsyncStorage.setItem('uid', data)
-
+          AsyncStorage.setItem('name', name)
+          AsyncStorage.setItem('mobile', mobile)
+          AsyncStorage.setItem('type', type)
             if(this.state.type ===0 ){ 
               if(Process ===0){ this.props.navigation.navigate('Uregister',{
                 id:data
@@ -159,7 +191,7 @@ UserLoginFunction = async() =>{
 
          }
   else{
-        alert(responseJson.msg);
+    this.Show_Custom_Alert(responseJson.msg);
          }
   
        }).catch((error) => {
@@ -171,9 +203,9 @@ UserLoginFunction = async() =>{
   }
  
   
-  Show_Custom_Alert(visible) {
+  Show_Custom_Alert(data) {
  
-    this.setState({Alert_Visibility: visible});
+    this.setState({Alert_Visibility: true,msg:data});
     
   }
   ok_Button=()=>{
@@ -212,7 +244,7 @@ UserLoginFunction = async() =>{
  
                     <Text style={styles.Alert_Title}>Opps..!</Text>
  
-                    <Text style={styles.Alert_Message}> {this.state.mydata.msg} </Text>
+                    <Text style={styles.Alert_Message}> {this.state.msg} </Text>
                   
                   
                 </View>
@@ -238,7 +270,8 @@ UserLoginFunction = async() =>{
         
  <ScrollView style={{flex: 1}}>
    <View style={{ justifyContent:'center',alignItems:'center'}}>
- <Image source={require('../../img/logo/splash_logo3x.png')} style={{maxHeight:150,resizeMode: 'contain'}} />
+     <Text></Text>
+ <Image source={require('../../img/logo/logo-login.png')} style={{maxHeight:170,resizeMode: 'contain'}} />
 
 <View style ={{flexDirection:"row",paddingVertical:20}}>
 <Radio selected={this.state.selected1} style ={{paddingHorizontal:5,fontSize:5}} color="#acafb5" selectedColor	="#a8ada9"

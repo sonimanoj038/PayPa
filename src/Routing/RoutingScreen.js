@@ -44,7 +44,13 @@ import BusinessTimeline from '../Business/Screens/BusinessTimeline';
 import UploadBusiness from '../Business/Screens/UploadBusiness';
 import QrCodeScreen from '../Business/Screens/QRCode';
 import BChangePin from '../Common/Screens/ChangePassword';
+import ContactUs from '../Common/Screens/ContactUs';
+import AsyncStorage from '@react-native-community/async-storage';
+export const USER_KEY = "true";
 
+export const onSignIn = () => AsyncStorage.setItem(USER_KEY, "true");
+
+export const onSignOut = () => AsyncStorage.removeItem(USER_KEY);
 const transitionConfig = () => {
     return {
       transitionSpec: {
@@ -90,15 +96,12 @@ UploadBusiness:UploadBusiness,
 Welcome:WelcomeAgain,
 Bset:BusinessSetting,
 paynow:PaymentScreen,
-UWallet:UWallet,
-Scanner:ScannerScreen
 
-
-
+ForgotPin:BChangePin
 
   },{
-      
-           initialRouteName:'Login',
+      // initialRouteName:'Uregister',
+        
              transitionConfig,
            headerMode: 'none',
             navigationOptions: {
@@ -131,6 +134,8 @@ Scanner:ScannerScreen
     USetting:UserSetting,
     USregister: UserEditProfile,
     UChangePin:ChangePin,
+    UContactUs :ContactUs 
+
   },
   {
     headerMode: 'none',
@@ -146,7 +151,9 @@ Scanner:ScannerScreen
         tabBarVisible = false
     }else if ( routeName == 'UChangePin' ) {
       tabBarVisible = false
-  }
+  }else if ( routeName == 'UContactUs' ) {
+    tabBarVisible = false
+}
    
    
     return {
@@ -164,7 +171,9 @@ Scanner:ScannerScreen
     BSregister: BusinessEditProfile,
     SUploadBusiness:EditBusinessProfile,
     BChangePin:BChangePin,
-    Qrcode:QrCodeScreen
+    Qrcode:QrCodeScreen,
+    BContactUs :ContactUs 
+
   },
   {
     headerMode: 'none',
@@ -189,7 +198,10 @@ Scanner:ScannerScreen
 
       tabBarVisible = false
     }
-   
+    else if ( routeName == 'BContactUs' ) {
+
+      tabBarVisible = false
+    }
    
     return {
       tabBarVisible,
@@ -228,7 +240,7 @@ Scanner:ScannerScreen
     return {
       tabBarVisible,
      
-      tabBarIcon:<Image source ={require('../img/user/ScanPay3.png')} style={{ color:'#1c4478',height:32,resizeMode:'contain' }} />
+      tabBarIcon:<Image source ={require('../img/user/ScanPay3.png')} style={{ height:32,resizeMode:'contain' }} />
     };
   };
 
@@ -373,13 +385,33 @@ const App = createSwitchNavigator({
   Business: {
     screen: BusinessTab,
   },
- 
+  UWallet:UWallet,
+},
+{
+  
 });
 const AppContainer = createAppContainer(App);
 
 export default class RoutingScreen extends React.Component {
-  render() {
-    return <AppContainer />;
+
+  
+  render() {return <AppContainer />
+    
   }
+  
+
 }
 
+export const isSignedIn = () => {
+  return new Promise((resolve, reject) => {
+    AsyncStorage.getItem(USER_KEY)
+      .then(res => {
+        if (res !== null) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      })
+      .catch(err => reject(err));
+  });
+};

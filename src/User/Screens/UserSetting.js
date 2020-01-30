@@ -15,7 +15,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { Container, Accordion,Radio,Right,Text, ListItem,Item,Left ,Button, Footer,Header,Body,Title, Content,CheckBox, List} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-
+import {onSignOut} from '../../Routing/RoutingScreen'
 
 export default class UserSetting extends React.Component {
 
@@ -123,7 +123,9 @@ term:false
           <ListItem  style = {{padding:0,backgroundColor:'#ffff'}} >
             
             <Left>
+            <TouchableOpacity onPress ={()=> this.props.navigation.navigate('UContactUs')}>
               <Text style= {{color:'#5c391b',fontSize:14}}>Contact Us</Text>
+              </TouchableOpacity>
             </Left>
             <Right>
               <Icon name="md-arrow-forward"  style={{fontSize:20}}/>
@@ -143,7 +145,7 @@ term:false
             <Text>
 
             </Text>
-            <Button block  style = {{width:'95%',justifyContent:'center',alignItems:'center',alignSelf:'center', backgroundColor:'#e46c0b'}} onPress = {()=>  this.props.navigation.navigate('Login')}>
+            <Button block  style = {{width:'95%',justifyContent:'center',alignItems:'center',alignSelf:'center', backgroundColor:'#e46c0b'}} onPress = {()=>onSignOut().then(this.props.navigation.navigate('Login'))}>
             <Text style = {{color:'white',fontFamily:'System',fontSize:18,fontWeight:'700'}}>LOGOUT</Text>
           </Button>
           <Text></Text>

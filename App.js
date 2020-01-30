@@ -25,44 +25,45 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-
+import { isSignedIn } from "./src/Routing/RoutingScreen";
 import SplashScreen from 'react-native-splash-screen'
-
+import WelcomeAgain from './src/Common/Screens/WelcomeAgain'
 import RoutingScreen from './src/Routing/RoutingScreen';
+
 import { Root } from "native-base";
 export default class App extends React.Component{
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      signedIn: false,
+      checkedSignIn: false
+    };
+  }
 
 
-  componentDidMount=()=>{
 
-  
+  componentDidMount=async()=>{
+
       SplashScreen.hide()
+   
     
   }
 
   render(){
-  return (
     
-  <Fragment>
+      return<Fragment>
+      <StatusBar barStyle="light-content" hidden = {false} backgroundColor="#1c4478"/>
+      <Root>
+      <RoutingScreen/>
+  </Root>
+ 
+    </Fragment> 
     
-    <StatusBar barStyle="light-content" hidden = {false} backgroundColor="#1c4478"/>
-    <Root>
-<RoutingScreen/>
-</Root>
-
-  </Fragment>) 
-  
+  }
  
   
-  
-
-
-   
-
-
-  
-};
 }
 const styles = StyleSheet.create({
  

@@ -29,7 +29,8 @@ import Geolocation from '@react-native-community/geolocation';
 import Geocode from "react-geocode";
 import {toastr} from '../../Common/Screens/LoginScreen'
 import AsyncStorage from '@react-native-community/async-storage';
-
+import DatePicker from 'react-native-datepicker'
+import moment from 'moment';
 Geocode.setApiKey("AIzaSyCkuCCndhl7YDUKBZvhX9N5yubGNC_LdjU");
  
 // set response language. Defaults to english.
@@ -57,7 +58,14 @@ export default class EditBusinessProfile extends React.Component {
       weekEnd:'',
       pholiday:'',
       loading:false,
-      Alert_Visibility:false,
+      Alert_Visibility:false,Wtime1:'00:00',
+      Wtime2:'00:00' ,
+      Ftime1:'00:00',
+      Ftime2:'00:00' ,
+      Stime1:'00:00',
+      Stime2:'00:00' ,
+      Sutime1:'00:00',
+      Sutime2:'00:00' ,
 msg:'',
 images:[],
 imagesUpload:[],
@@ -348,6 +356,7 @@ getImage = ()=>{
         </Header>
         <ScrollView style={{flex:1}}>
  <Content  >
+
  <Modal
           style={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}
           visible={this.state.Alert_Visibility}
@@ -417,61 +426,187 @@ getImage = ()=>{
           </Item>
 
           <Mytext></Mytext>
-          <Text style = {{width:'90%',fontFamily: 'Roboto-Medium',paddingHorizontal:20}}> Business Hours</Text>
+          <Text style = {{fontFamily: 'Roboto-Medium',paddingHorizontal:20,fontWeight:'bold'}}> Business Hours</Text>
 
-          <Mytext></Mytext>
+         
           <View style={{flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'}}>
-        <Text style = {styles.BusinessText}>
-Weekly 
-            
-        </Text>
+  paddingHorizontal:10,
+  justifyContent:'space-evenly',
+    width:'100%',alignItems:"center"
+   }}>
 
-        <Text style = {styles.BusinessText}>
-Weekend
-            
-        </Text>
-        <Text style = {styles.BusinessText}>
-Public Holiday
-            
-        </Text>
 
-          </View>
-<View style={{flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',paddingHorizontal:10,}}>
-
-         <Item  regular style ={styles.InputItem2} >
-    
-     <Input placeholder='9-6' placeholderTextColor="#797b7d" 
-     style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15,paddingHorizontal:7,lineHeight:10}} 
-     onChangeText={(week)=>this.setState({week})}
-     />
-          </Item>
-          <Item  regular style ={styles.InputItem2} >
-    
-     <Input placeholder='10-5' placeholderTextColor="#797b7d" 
-     style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}}
-     onChangeText={(weekEnd)=>this.setState({weekEnd})}
-     
-     />
-          </Item>
-          
-          <Item  regular style ={styles.InputItem2} >
-    
-    <Input placeholder='off' placeholderTextColor="#797b7d" 
-    style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} 
-    
-    onChangeText={(pholiday)=>this.setState({pholiday})}
-    />
-         </Item>
          
+       <View style ={{flexDirection:'column',alignItems:'center'}} >
+       <Text style = {{fontFamily: 'Roboto-Light',padding:5,fontSize:15}}> Weekdays:</Text>
+       <View style={{flexDirection:'row',alignItems:'center'}}>
+        <DatePicker
+        style={{ 
+          width:50,
+         fontFamily:'Roboto-Medium',backgroundColor:'white',borderColor:'white',color:'white'}}
+        customStyles={{dateInput:{borderWidth: 0}}}
+        mode="time"
+       date = {this.state.Wtime1}
+        format="HH:m"
+      showIcon={false}
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        onDateChange={(time) => {this.setState({Wtime1:time})}}
+      />
 
-          </View>
+        <Text style = {{paddingHorizontal:6,fontWeight:'bold'}}>
+-
+            
+        </Text>
+        <DatePicker
+        style={{  fontSize:13,
+          width:50,
+         textAlign:'center',
+         fontFamily:'Roboto-Medium',backgroundColor:'white',borderColor:'white',color:'white'}}
+        customStyles={{dateInput:{borderWidth: 0}}}
+        mode="time"
+       date = {this.state.Wtime2}
+        format="HH:m"
+      showIcon={false}
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        onDateChange={(time) => {this.setState({Wtime2: time})}}
+      />
+
+</View>   
+</View>
+
+
+<View style ={{flexDirection:'column',alignItems:'center'}} >
+       <Text style = {{fontFamily: 'Roboto-Light',padding:5,fontSize:15}}> Friday:</Text>
+       <View style={{flexDirection:'row',alignItems:'center'}}>
+        <DatePicker
+        style={{ 
+          width:50,
+         fontFamily:'Roboto-Medium',backgroundColor:'white',borderColor:'white',color:'white'}}
+        customStyles={{dateInput:{borderWidth: 0}}}
+        mode="time"
+       date = {this.state.Ftime1}
+        format="HH:m"
+      showIcon={false}
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        onDateChange={(time) => {this.setState({Ftime1:time})}}
+      />
+
+        <Text style = {{paddingHorizontal:6,fontWeight:'bold'}}>
+-
+            
+        </Text>
+        <DatePicker
+        style={{  fontSize:13,
+          width:50,
+         textAlign:'center',
+         fontFamily:'Roboto-Medium',backgroundColor:'white',borderColor:'white',color:'white'}}
+        customStyles={{dateInput:{borderWidth: 0}}}
+        mode="time"
+       date = {this.state.Ftime2}
+        format="HH:m"
+      showIcon={false}
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        onDateChange={(time) => {this.setState({Ftime2: time})}}
+      />
+
+</View>   
+</View>
+</View>
+          <Text></Text>
+        
+          <View style={{flex: 1,
+    flexDirection: 'row',
+  paddingHorizontal:10,
+  justifyContent:'space-evenly',
+    width:'100%',alignItems:"center"
+   }}>
+
+       <View style ={{flexDirection:'column',alignItems:'center'}} >
+       <Text  style = {{fontFamily: 'Roboto-Light',padding:5,fontSize:15}}> Saturday:</Text>
+       <View style={{flexDirection:'row',alignItems:'center'}}>
+        <DatePicker
+        style={{ 
+          width:50,
+         fontFamily:'Roboto-Medium',backgroundColor:'white',borderColor:'white',color:'white'}}
+        customStyles={{dateInput:{borderWidth: 0}}}
+        mode="time"
+       date = {this.state.Stime1}
+        format="HH:m"
+      showIcon={false}
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        onDateChange={(time) => {this.setState({Stime1:time})}}
+      />
+
+        <Text style = {{paddingHorizontal:6,fontWeight:'bold'}}>
+-
+            
+        </Text>
+        <DatePicker
+        style={{  fontSize:13,
+          width:50,
+         textAlign:'center',
+         fontFamily:'Roboto-Medium',backgroundColor:'white',borderColor:'white',color:'white'}}
+        customStyles={{dateInput:{borderWidth: 0}}}
+        mode="time"
+       date = {this.state.Wtime2}
+        format="HH:m"
+      showIcon={false}
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        onDateChange={(time) => {this.setState({Stime2: time})}}
+      />
+
+</View>   
+</View>
+
+
+<View style ={{flexDirection:'column',alignItems:'center'}} >
+       <Text  style = {{fontFamily: 'Roboto-Light',padding:5,fontSize:15}}> Sunday:</Text>
+       <View style={{flexDirection:'row',alignItems:'center'}}>
+        <DatePicker
+        style={{ 
+          width:50,
+         fontFamily:'Roboto-Medium',backgroundColor:'white',borderColor:'white',color:'white'}}
+        customStyles={{dateInput:{borderWidth: 0}}}
+        mode="time"
+       date = {this.state.Sutime1}
+        format="HH:m"
+      showIcon={false}
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        onDateChange={(time) => {this.setState({Sutime1:time})}}
+      />
+
+        <Text style = {{paddingHorizontal:6,fontWeight:'bold'}}>
+-
+            
+        </Text>
+        <DatePicker
+        style={{  fontSize:13,
+          width:50,
+         textAlign:'center',
+         fontFamily:'Roboto-Medium',backgroundColor:'white',borderColor:'white',color:'white'}}
+        customStyles={{dateInput:{borderWidth: 0}}}
+        mode="time"
+       date = {this.state.Sutime2}
+        format="HH:m"
+      showIcon={false}
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        onDateChange={(time) => {this.setState({Sutime2: time})}}
+      />
+
+</View>   
+</View>
+</View>
           <Mytext></Mytext>
+         
           <Text style = {{width:'90%',fontFamily: 'Roboto-Medium',paddingHorizontal:17}}> Upload Business Photo</Text>
 <View  style = {{width:'90%',height:5,backgroundColor:'grey',alignItems:'center',alignSelf:'center'}}/>
 <Mytext></Mytext>

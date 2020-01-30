@@ -23,10 +23,15 @@ import { Container, Radio,Right,Text, Left,Input,Item ,Button, Toast, Content} f
 
 import Mytext from '../Component/Mytext';
 
-
+import AsyncStorage from '@react-native-community/async-storage';
+import RoutingScreen from '../../Routing/RoutingScreen';
 
 const { height } = Dimensions.get('window');
  export default class WelcomeAgain extends React.Component {
+  static navigationOptions =({navigation}) =>( {
+
+
+  })
   
   constructor(props){
 
@@ -39,10 +44,29 @@ type:0,
 loading:false,
 mobile:'',
 pin:'',
+userid:'',name:'',
 disablepin:true,
-WelcomeAgain:true
+WelcomeAgain:true,msg:'',
+Alert_Visibility:false
 }
 
+}
+validateInput = ()=>{
+  const {pin }  = this.state ;
+
+ if (pin ==="")
+{
+  toastr.showToast("Enter  Pin")
+  return false;
+
+}else if (pin.lengh <5){
+  toastr.showToast("Enter a Valid Pin")
+  return false;
+}
+
+else
+this.setState({loading:true,disabled:false})
+return true;
 }
 
 handlePinChange(e){
@@ -55,9 +79,17 @@ handlePinChange(e){
         }
       
 }
+componentDidMount = async() => {
+  const uid = await AsyncStorage.getItem('uid')
+  const name= await AsyncStorage.getItem('name')
+  const mobile = await AsyncStorage.getItem('mobile')
+  const type = await AsyncStorage.getItem('type')
 
-UserLoginAgain = async() =>{
+this.setState({userid:uid,name:name,mobile:mobile,type:type})
   
+ }
+UserLoginAgain = async() =>{
+
   const {pin }  = this.state ;
   const { mobile }  = this.state ;
   const {type} = this.state
@@ -67,7 +99,6 @@ UserLoginAgain = async() =>{
   formdata.append("type",type);
 
   if(this.validateInput()){
-
     await fetch('https://www.markupdesigns.org/paypa/api/login', {
    method: 'POST',
    headers: {
@@ -77,32 +108,63 @@ UserLoginAgain = async() =>{
   
  }).then((response) => response.json())
        .then((responseJson) => {
+       
   this.setState({loading:false,mydata:responseJson})
-       
-        if(responseJson.status === 'Success')
-         {
-       
-            if(this.state.type ===0){ this.props.navigation.navigate('Uregister')
-          
-        
-          }else{this.props.navigation.navigate('Bregister')}
-            
+  if(responseJson.status === 'Success')
+  {
   
+   let data = responseJson['data']['id']
+   let Process = responseJson['data']['status']  
+   let type = responseJson['data']['type']   
+      
+     if(type ==='0' ){ 
+       if(Process ===0){ this.props.navigation.navigate('Uregister',{
+         id:data
+     
+         })}
+         else if(Process ===1){
+           this.props.navigation.navigate('User')
          }
-         else{
-  
-          this.Show_Custom_Alert();
+      
+       }
+
+       else{
+
+         if(Process ===0){
+           this.props.navigation.navigate('Bregister')
+         }else if(Process ===1){
+           this.props.navigation.navigate('Business')
+
          }
-  
-       }).catch((error) => {
-         console.error(error);
-       });
-  
-  
-   }
-  }
+         else
+         this.props.navigation.navigate('UploadBusiness',{
+           id:data
+       
+           })
+
+       }
+    
+
+  } else{
+    this.Show_Custom_Alert(responseJson.msg);
+     }
+
+   }).catch((error) => {
+     console.error(error);
+   });
+      }
+ }
  
+ Show_Custom_Alert(data) {
+ 
+  this.setState({Alert_Visibility: true,msg:data});
   
+}
+ok_Button=()=>{
+
+  this.setState({Alert_Visibility: false});
+
+}
   
 
     render(){
@@ -114,11 +176,51 @@ UserLoginAgain = async() =>{
       flex:1,
       width: null,
       height: null,alignItems:'center'}} >
-        
- <Image source={require('../../img/logo/login3x.png')} style={{maxHeight:170,resizeMode: 'contain',marginTop:20}} />
+     <Text></Text>
+     <Modal
+          style={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}
+          visible={this.state.Alert_Visibility}
+          transparent={true}
+ 
+          animationType={"fade"}
+ 
+          onRequestClose={ () => { this.Show_Custom_Alert(!this.state.Alert_Visibility)} } >
+ 
+ 
+            <View style={{ flex:1, alignItems: 'center', justifyContent: 'center',backgroundColor: 'rgba(0, 0, 0.2, 0.7)'}}>
+ 
+ 
+                <View style={styles.Alert_Main_View}>
+ 
+ 
+                    <Text style={styles.Alert_Title}>Opps..!</Text>
+ 
+                    <Text style={styles.Alert_Message}> {this.state.msg} </Text>
+                  
+                  
+                </View>
+                <View style={{flexDirection: 'row',height:'10%',width:'70%'}}>
+ 
+ 
+ <TouchableOpacity 
+     style={styles.buttonStyle} 
+     onPress={this.ok_Button} 
+     activeOpacity={0.7} 
+     >
+
+     <Text style={styles.TextStyle}> OK</Text>
+
+ </TouchableOpacity>
+
+</View>
+            </View>
+ 
+ 
+        </ Modal >
+ <Image source={require('../../img/logo/logo-login.png')} style={{maxHeight:150,resizeMode: 'contain',marginTop:20}} />
      <View  elevation={5} style = {styles.body}>
      <Text style={{color:'grey',fontFamily: 'Roboto-Midium',fontSize:12}}>Hello Again</Text>
-<Text style={{fontFamily: 'Roboto-Midium',fontSize:18,padding:5}}>Richard Alen</Text>
+<Text style={{fontFamily: 'Roboto-Midium',fontSize:18,padding:5}}>{this.state.name}</Text>
  <Item  rounded style ={styles.inputitem} >
      <Image source={require('../../img/common/login-password2.png')} />
      <Input placeholder='Enter 5 digit Pin' placeholderTextColor="#133b6c" style={{color:'#133b6c',fontFamily: 'Roboto-Light',fontSize:12}} 
@@ -130,17 +232,20 @@ UserLoginAgain = async() =>{
           <Mytext></Mytext>
 
 
-          <Button  disabled={!this.state.disablepin } rounded  style ={{paddingHorizontal:50,alignItems:'center',width:'60%',backgroundColor:'#1c4478'}} onPress ={this.UserLoginFunction}>
+          <Button rounded  style ={{paddingHorizontal:50,alignItems:'center',width:'60%',backgroundColor:'#1c4478'}} onPress ={this.UserLoginAgain}>
             {this.state.loading?<ActivityIndicator
                animating = {this.state.loading}
-               color = '#1c4478'
+               color = 'white'
                size={"large"}
                style ={{paddingHorizontal:50,alignItems:'center',width:'100%'}}
               />:<Mytext  style ={{color:'white',textAlign:"center",width:'100%',fontWeight:'700',
-              opacity: this.state.disablepin  ? 1  : 0.7}}>LOGIN</Mytext>}
+             }}>LOGIN</Mytext>}
           </Button>
+<TouchableOpacity onPress ={()=> navigate('pass',{type:this.state.type})}>
 
-          <Text style={{color:'#e46c0b',fontFamily: 'Roboto-Light',fontSize:14,padding:5}}>Forgot Your Pin?</Text>
+<Text style={{color:'#e46c0b',fontFamily: 'Roboto-Light',fontSize:14,padding:5}}>Forgot Your Pin?</Text>
+</TouchableOpacity>
+          
 
          
      </View >
@@ -170,10 +275,66 @@ const styles = StyleSheet.create({
     backgroundColor:'white',width:'65%',
     borderColor:'#e46c0b'
   },
+  Alert_Main_View:{
  
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor : "white",
+     
+    height: 200 ,
+    width: '70%',
+    borderWidth: 1,
+    borderColor: '#1c4478',
+    borderRadius:7,
+    
+   
+  },
+   
+  Alert_Title:{
+   
+    fontSize: 25, 
+    color: "black",
+    textAlign: 'center',
+    padding: 10,
+    height: '28%',
+    fontFamily:'Roboto-Medium'
+   
+  },
+   
+  Alert_Message:{
+   
+      fontSize: 22, 
+      color: "black",
+      textAlign: 'center',
+      padding: 10,
+      height: '42%',
+      fontFamily:'Roboto-Light'
+    },
+   
+  buttonStyle: {
+      
+    width:'100%',
+    backgroundColor:'#1c4478',
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+   marginVertical:5,
+   
+   
+    borderRadius:7,
+  },
+     
+  TextStyle:{
+      color:'white',
+      textAlign:'center',
+      fontSize: 23,
+      marginTop: -5, fontFamily:'Roboto-Medium'
+      
+  },
    
   
  
+  
  
 });
 

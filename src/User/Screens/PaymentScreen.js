@@ -27,7 +27,8 @@ export default class PaymentScreen extends React.Component {
 
 result:"",
 msg:'',
-amount:''
+amount:'',
+expireDate:'25/12/2020'
     }
 }
 
@@ -67,6 +68,12 @@ amount:''
        250.50
         </Text>
         </View>
+        </View>
+        <View style={{alignItems:'center'}}>
+        <Text style ={{color:'#e46c0b', fontFamily:'Roboto-Light',fontSize:13,textAlign:'center'}}>
+         Your Wallet Balance will expire on {this.state.expireDate}
+        </Text>
+      
 
 </View>
 </View>

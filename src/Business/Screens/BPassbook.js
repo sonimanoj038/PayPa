@@ -53,7 +53,7 @@ term:false
 <List  >
 
 <ListItem itemHeader first>
-              <Text>Payment History</Text>
+              <Text>Payments History</Text>
             </ListItem>
             <ListItem noBorder >
               <Left>

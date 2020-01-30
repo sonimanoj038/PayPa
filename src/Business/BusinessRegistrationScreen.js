@@ -56,6 +56,7 @@ currentLongitude: 'unknown',//Initial Longitude
     doc3:'',
     doc4:''
     ,userid:'',
+    Contact:''
     }
 }
 
@@ -63,7 +64,7 @@ validateInput = ()=>{
   const {fname }  = this.state ;
   const { lname }  = this.state ;
   const { Cmail}  = this.state ;
-
+  const { Contact}  = this.state ;
   const { email }  = this.state ;
   const { doc1}  = this.state ;
   const { doc2}  = this.state ;
@@ -87,9 +88,15 @@ else if (email ==="")
   return false
 
 }
-else if (email !==Cmail)
+else if (Contact ==="")
 {
-  toastr.showToast("Email Not Matched")
+  toastr.showToast("Enter Contact Number")
+  return false
+
+}
+else if (Contact.length <10)
+{
+  toastr.showToast("Enter Correct Number")
   return false
 
 }
@@ -298,7 +305,7 @@ const {userid} = this.state
           
           </Left>
           <Body  >
-          <Text style = {{color:'white',fontSize:18,fontFamily:''}}> Business Registration </Text>
+          <Text style = {{alignSelf:'center',color:'white',fontSize:18,fontFamily:'Roboto-Medium'}}> Business Registration </Text>
           {/* <Title > Business Registration</Title> */}
           </Body>
         
@@ -343,12 +350,14 @@ style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
  onChangeText={(Cmail)=>this.setState({Cmail})}
 style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
      </Item>
+    <Mytext></Mytext>
+    <Item  regular style ={styles.InputItem} >
 
-          <Mytext>
-
-
-</Mytext>
-
+<Input placeholder='Contact Number' placeholderTextColor="#797b7d" 
+ onChangeText={(Contact)=>this.setState({Contact})}
+style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} keyboardType="numeric" maxLength={10}/>
+     </Item>
+    <Mytext></Mytext>
 <View style = {{flexDirection:'row',justifyContent:"space-around",paddingHorizontal:10}}>
     <Text style={{fontSize:11,fontFamily: 'Roboto-Medium'}}>Director Certified Id Copy</Text>
     <Text style={{fontSize:11,fontFamily: 'Roboto-Medium'}}>Business Registration Document</Text>
