@@ -4,6 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.cameraroll.CameraRollPackage;
+
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+
+import com.BV.LinearGradient.LinearGradientPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.reactnativecommunity.geolocation.GeolocationPackage;
 import com.horcrux.svg.SvgPackage;
@@ -33,6 +41,8 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
             new SplashScreenReactPackage();
+            packages.add(new RNFirebaseMessagingPackage());
+            packages.add(new RNFirebaseNotificationsPackage());
 
           return packages;
         }

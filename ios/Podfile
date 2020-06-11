@@ -48,6 +48,14 @@ target 'FirstProject' do
 
   pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
 
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
+  pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+
+  pod 'RNCustomizedImagePicker', :path => '../node_modules/react-native-customized-image-picker'
+
+  pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
+
   target 'FirstProjectTests' do
     inherit! :search_paths
     # Pods for testing

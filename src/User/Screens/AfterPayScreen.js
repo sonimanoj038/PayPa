@@ -29,21 +29,31 @@ result:"",
 ScanResult:false,
 scan:false
     }
+    this.goToHome= this.goToHome.bind(this);
 }
 
-
+goToHome(){
+ 
+  
+//   const resetAction = StackActions.reset({
+//     index: 0,
+//     key: null,
+//     actions: [NavigationActions.navigate({ routeName: 'Home' })],
+// });
+this.props.navigation.navigate('UWallet');
+   
+     
+}
   render() {
     const { navigation } = this.props;
     return (
         <Container style = {{backgroundColor:'#1c4478',}}>
         <Header  style={{backgroundColor:'#1c4478'}} noShadow>
             <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
-              <Left>
-              <Icon name='md-arrow-back'  style={{color:'white',fontSize:25}}/>
-              </Left>
-              <Body  >
-              <Title  style={{left:50}}>Paid</Title>
-              </Body>
+              
+           
+            <Text style={{alignSelf:'center',color:'white',fontSize:18,fontFamily:'Roboto-Medium'}}>Paid</Text>
+           
              
             </Header>
     
@@ -64,8 +74,8 @@ scan:false
         <Text style ={{color:'white', fontFamily:'Roboto-Light',fontSize:22,}}>
         R 
         </Text>
-        <Text style ={{color:'white', fontFamily:'Roboto-Light',fontSize:30,}}>
-       250.50
+        <Text style ={{color:'white', fontFamily:'Roboto-Light',fontSize:30,paddingLeft:10}}>
+       {this.props.navigation.state.params.amount} 
         </Text>
         </View>
 
@@ -83,7 +93,7 @@ scan:false
         alignItems: 'center'
       }}
       underlayColor = '#ccc'
-      onPress = { () => alert('Yaay!') }
+      onPress = { this.goToHome}
     >
       <Text style ={{color:'white', fontFamily:'Roboto-Light',fontSize:30,}} > OK </Text>
     </TouchableHighlight>

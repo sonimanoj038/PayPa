@@ -21,13 +21,14 @@ import {
 
 
 // @ts-ignore
-import { Container, Radio,Right,Text, Left,Input,Item ,Button, Footer,Header,Body,Title, Content,CheckBox} from 'native-base';
+import { Container, Radio,Right,Text, Left,Input,Item ,Button, Footer,Header,Body,Title, Content,CheckBox,Thumbnail} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Mytext from '../../Common/Component/Mytext';
 import DocumentPicker from 'react-native-document-picker';
 import Geolocation from '@react-native-community/geolocation';
 import {toastr} from '../../Common/Screens/LoginScreen'
-import AsyncStorage from '@react-native-community/async-storage';
+import ImagePicker from 'react-native-image-crop-picker';
+import AsyncStorage from '@react-native-community/async-storage'; 
 export default class UserRegistrationScreen extends React.Component {
    
 
@@ -39,8 +40,8 @@ export default class UserRegistrationScreen extends React.Component {
    
     this.state ={
       fname:"",
-      lname:"",
-      mobile:'',
+      sname:"",
+      Cmail:'',
       dateSalary:null,
       email:'',
       loading:false,
@@ -50,37 +51,52 @@ currentLongitude: 'unknown',//Initial Longitude
     currentLatitude: 'unknown',
     doc1:'',
     doc2:'',
+    doc3:'',
+    doc4:'',
     doc2name:'',
     doc1name:'',
     doc3name:'',
     doc4name:'',
-    doc3:'',
-    doc4:''
-    ,userid:'',msg:'',
-    
-    Alert_Visibility:false
+    doc1type:'',
+    doc2type:'',
+    doc3type:'',
+    doc4type:'',
+   userid:'',msg:'',
+    checked:false,
+    Alert_Visibility:false,
+    ModalView:true,
+    pic:"",type:'',session_id:''
     }
 }
 
+validateEmail(email) {
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+  {
+    return true;
+  }
+  return false;
+}
 
 validateInput = ()=>{
   const {fname }  = this.state ;
-  const { lname }  = this.state ;
-  const { mobile}  = this.state ;
-  const { dateSalary }  = this.state ;
+  const { sname }  = this.state ;
+  const { Cmail}  = this.state ;
+  const { pic }  = this.state ;
   const {term }  = this.state ;
   const { email }  = this.state ;
   const { doc1}  = this.state ;
   const { doc2}  = this.state ;
   const { doc3 }  = this.state ;
   const {doc4} = this.state;
-if( fname ===""){
+  const{dateSalary} = this.state
+
+ if( fname ===""){
 
   toastr.showToast("Enter First Name")
 return false
 }
 
-else if (lname ==="")
+else if (sname ==="")
 {
   toastr.showToast("Enter Surname")
   return false
@@ -92,50 +108,56 @@ else if (email ==="")
   return false
 
 }
-else if (mobile ==="")
+else if (email && !this.validateEmail(email)) {
+  toastr.showToast('Please enter valid Email ID');
+  return false
+}
+else if(Cmail ===""){
+
+  toastr.showToast("Enter Confiramtion Email")
+  return false
+}
+else if (email !==Cmail)
 {
-  toastr.showToast("Enter Mobile Number")
+  toastr.showToast("Email addresses do not match")
   return false
 
 }
-else if (doc1 ==="")
+
+
+else if (doc1 ===""  && this.state.checked)
 {
   toastr.showToast("Upload Certified Id Copy")
   return false
 
 }
-else if (doc2 ==="")
+else if (doc2 ===""  && this.state.checked)
 {
-  toastr.showToast("Upload 3 Months Bank Statements")
+  toastr.showToast("Upload 3 Months Bank Statement")
   return false
 
 }
-else if (doc3 ==="")
+else if (doc3 ==="" && this.state.checked)
 {
-  toastr.showToast(" Uplaod latest payslips")
+  toastr.showToast(" Uplaod Latest Payslip")
   return false
 
 }
-else if (doc4 ==="")
+else if (doc4 ==="" && this.state.checked)
 {
-  toastr.showToast("Upload proof of residance")
+  toastr.showToast("Upload Proof of Residence")
   return false
 
 }
-else if (dateSalary ==="")
-{
-  toastr.showToast("Enter Date of Salary")
-  return false
 
-}
 else if (term ===false)
 {
-  toastr.showToast("Please accept Term & Condition")
+  toastr.showToast("Please Accept Terms & Conditions")
   return false
 
 }
 else
-
+this.setState({loading:true})
 return true;
 }
 
@@ -150,20 +172,22 @@ Show_Custom_Alert(data) {
 ok_Button=()=>{
  
   this.setState({Alert_Visibility: false});
+  
   this.props.navigation.navigate('User')
-          
+ 
+      
 }
- getFile =async()=>
+getFile =async()=>
 
 {
   try {
     const res = await DocumentPicker.pick({
-      type: [DocumentPicker.types.pdf],
+      type: [DocumentPicker.types.pdf,DocumentPicker.types.images],
     })
    
-   
+   console.log(res)
     this.setState({doc1:res.uri,
-    doc1name:res.name})
+    doc1name:res.name,doc1type:res.type})
   } catch (err) {
     if (DocumentPicker.isCancel(err)) {
       console.warn(err)
@@ -182,12 +206,12 @@ getFile2 =async()=>
   
   try {
     const res = await DocumentPicker.pick({
-      type: [DocumentPicker.types.pdf],
+      type: [DocumentPicker.types.pdf,DocumentPicker.types.images],
     })
    
 
     this.setState({doc2:res.uri,
-    doc2name:res.name})
+    doc2name:res.name,doc2type:res.type})
   } catch (err) {
     if (DocumentPicker.isCancel(err)) {
       console.warn(err)
@@ -202,11 +226,11 @@ getFile3 =async()=>
 {
   try {
     const res = await DocumentPicker.pick({
-      type: [DocumentPicker.types.pdf],
+      type: [DocumentPicker.types.pdf,DocumentPicker.types.images],
     })
    
     
-    this.setState({doc3:res.uri,doc3name:res.name})
+    this.setState({doc3:res.uri,doc3name:res.name,doc3type:res.type})
   } catch (err) {
     if (DocumentPicker.isCancel(err)) {
       console.warn(err)
@@ -221,12 +245,12 @@ getFile4 =async()=>
 {
   try {
     const res = await DocumentPicker.pick({
-      type: [DocumentPicker.types.pdf],
+      type: [DocumentPicker.types.pdf,DocumentPicker.types.images],
     })
    
     
     this.setState({doc4:res.uri,
-    doc4name:res.name})
+    doc4name:res.name,doc4type:res.type})
   } catch (err) {
     if (DocumentPicker.isCancel(err)) {
       console.warn(err)
@@ -239,44 +263,64 @@ getFile4 =async()=>
 componentDidMount = async() => {
 
   const value = await AsyncStorage.getItem('uid')
+  const session_id = await AsyncStorage.getItem('session_id')
   console.warn(value)
-  this.setState({userid:value})
+  this.setState({userid:value,session_id:session_id})
  
  }
-
+ getImage = ()=>{
+  ImagePicker.openPicker({
+      quality: 1.0,
+      maxWidth: 500,
+      maxHeight: 500,
+     
+    }).then(image => {
+       this.setState({pic:image.path,type:image.mime})
+    }) 
+  }
 
  submitData = async()=>{
 
 
   const {fname }  = this.state ;
-  const { sname }  = this.state ;
-  const {mobile} = this.state
+  const { sname }  = this.state
   const {email} = this.state
   const {dateSalary} = this.state
-  const {password} = this.state
-  
+  const {pic} = this.state
+ 
 const {userid} = this.state
 
   let formdata = new FormData();
-  formdata.append("mobile",mobile);
+
   formdata.append("fname",fname);
   formdata.append("sname",sname);
   formdata.append("email",email);
   formdata.append("dateSalary",dateSalary);
- 
-  formdata.append('doc1',
-  {uri:this.state.doc1 , name: this.state.doc1name, type: 'application/pdf'}
+  formdata.append("session_id", this.state.session_id);
+ if(pic!==""){
+  const newFile = {
+    uri:pic, type: this.state.type,
+    name:this.state.type.split("/") ==='png'?'images.png':'images.jpg'
     
-  );
-  formdata.append("doc2", {uri:this.state.doc2 , name: this.state.doc2name, type: 'application/pdf'});
-  formdata.append("doc3", {uri:this.state.doc3 , name: this.state.doc3name, type: 'application/pdf'});
-  formdata.append("doc4", {uri:this.state.doc4 , name: this.state.doc4name, type: 'application/pdf'});
-  formdata.append("uid",userid);
+  }
+  
+  formdata.append("pic",newFile);
+ }
+ 
+  if(this.state.checked){
 
+    formdata.append('doc1',{uri:this.state.doc1 , name: this.state.doc1name, type: this.state.doc1type});
+    formdata.append("doc2", {uri:this.state.doc2 , name: this.state.doc2name, type: this.state.doc2type});
+    formdata.append("doc3", {uri:this.state.doc3 , name: this.state.doc3name, type: this.state.doc3type});
+    formdata.append("doc4", {uri:this.state.doc4 , name: this.state.doc4name, type: this.state.doc4type});
+  }
+ 
+  formdata.append("uid",userid);
+  console.log(this.state.doc1, this.state.doc1name,this.state.doc1type,this.state.userid)
   if(this.validateInput()){
-    if(this.state.dateSalary >= 8000){
+    
       this.setState({loading:true})
-  await fetch('https://www.markupdesigns.org/paypa/api/addEditProfile', {
+  await fetch('https://www.markupdesigns.org/paypa/api/addProfile', {
     method: 'POST',
     headers: {
      'Content-Type': 'multipart/form-data',
@@ -285,8 +329,7 @@ const {userid} = this.state
     body:formdata
    
   }).then((response) => response.json()).then((responseJson) => {
-          
-        
+          console.log(responseJson)
         
          this.setState({loading:false,mydata:responseJson})
          if(responseJson.status === 'Success')
@@ -298,22 +341,16 @@ const {userid} = this.state
         
          
          else{
-  
-          alert(responseJson)
+          this.setState({loading:false})
+          alert(JSON.stringify(responseJson))
          }
    
         }).catch((error) => {
           console.warn(error);
         });
-      }
-      else{
-let msg = " You are not eligble beacuse your income is less then R8000. "
-        this.Show_Custom_Alert(msg);
-      }
-      }
+      }  
+      
     }
-
-
 
     render(){
   return (
@@ -347,16 +384,16 @@ let msg = " You are not eligble beacuse your income is less then R8000. "
  
                 <View style={styles.Alert_Main_View}>
  
+                <Image source={require('../../img/common/sucess.png')} style={{maxHeight:50,resizeMode: 'contain'}} />
+                    {this.state.msg?<Text style={styles.Alert_Title}>Oops!! </Text>:<Text style={styles.Alert_Title}>Success </Text>}
  
-                    {this.state.msg?<Text style={styles.Alert_Title}>Opps!! </Text>:<Text style={styles.Alert_Title}>Registration Successfull </Text>}
- 
-                    {this.state.msg? <Text style={styles.Alert_Message}> {this.state.msg}</Text>:<Text style={styles.Alert_Message}> Your Accout will be verify shortly </Text>}
+                    { this.state.checked? <Text style={styles.Alert_Message}> Your Accout will be verify shortly{this.state.msg}</Text>:<Text style={styles.Alert_Message}> You are registered successfully </Text>}
                   
                   
                 </View>
                 <View style={{flexDirection: 'row',height:'10%',width:'70%'}}>
  <TouchableOpacity 
-     style={styles.buttonStyle} 
+     style={styles.buttonStyleFull} 
      onPress={this.ok_Button} 
      activeOpacity={0.7} 
      >
@@ -365,23 +402,25 @@ let msg = " You are not eligble beacuse your income is less then R8000. "
 
 </View>
  </View>
+
 </ Modal >
+
+
+<Text></Text>
+<TouchableOpacity style ={{alignItems:'center',justifyContent:'center',alignSelf:'center'}} onPress ={this.getImage}>
+  <Thumbnail large source={this.state.pic?{uri:this.state.pic}:require('../../img/common/profile.png')}  /></TouchableOpacity>
+  <Text  style = {{alignSelf:'center',color:'grey',fontSize:14,alignItems:'center'}}>Timeline Profile Picture</Text>
 <Text></Text>
 <Item  regular style ={styles.InputItem} >
 
-     <Input placeholder='First Name' placeholderTextColor="#797b7d" 
-     style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}}
-     
-     onChangeText={(fname)=>this.setState({fname})}
-     />
-          </Item>
-
+<Input placeholder='Firstname *' placeholderTextColor="#797b7d" style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}}
+ onChangeText={(fname)=>this.setState({fname})}
+/>
+     </Item>
           <Mytext></Mytext>
-          
           <Item  regular style ={styles.InputItem} >
-
-     <Input placeholder='Surname' placeholderTextColor="#797b7d" style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}}
-      onChangeText={(lname)=>this.setState({lname})}
+     <Input placeceholder='Surname *' placeholderTextColor="#797b7d" style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}}
+      onChangeText={(sname)=>this.setState({sname})}
      />
           </Item>
 
@@ -395,27 +434,29 @@ style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
           <Mytext></Mytext>
           <Item  regular style ={styles.InputItem} >
 
-<Input placeholder='Mobile/Phone' placeholderTextColor="#797b7d" 
- onChangeText={(mobile)=>this.setState({mobile})}
- keyboardType="numeric"
- maxLength={10}
+          <Input placeholder='Confirm Email' placeholderTextColor="#797b7d" 
+ onChangeText={(Cmail)=>this.setState({Cmail})}
 style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
      </Item>
 
           <Mytext>
 </Mytext>
-<Item  regular style ={styles.InputItem} >
-
-<Input placeholder='Net Income After Deductions' placeholderTextColor="#797b7d"
- onChangeText={(dateSalary)=>this.setState({dateSalary})}
- keyboardType="numeric"
- maxLength={8}
-style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
+   
+     <Item  style ={[styles.InputItem,{backgroundColor:'#dfeaf2',justifyContent:'space-around',borderRadius:0,borderColor:'#dfeaf2'}]} >
+    <Text style={{fontSize:16,fontFamily: 'Roboto-Medium',paddingVertical:10,fontWeight:'bold'}}>Apply for PayPa credit?</Text>
+    <CheckBox checked={this.state.checked}  color='#1c4478' onPress= {()=>{this.setState({checked:!this.state.checked})}}/>
      </Item>
-     <Text></Text>
-<View style = {{flexDirection:'row',justifyContent:"space-around",paddingHorizontal:10}}>
+  <Text></Text>
+ 
+{this.state.checked?<View>
+  <Text style={{fontSize:11,fontFamily: 'Roboto-Light',paddingVertical:10,paddingHorizontal:10,color:'#e46c0b',textAlign:'center'}}>Note:-You must earn a minimum net income of R8000 in order to apply. </Text>
+  <Item  regular style ={styles.InputItem}>
+
+
+     </Item>
+     <Text></Text><View style = {{flexDirection:'row',justifyContent:"space-around",paddingHorizontal:10}}>
     <Text style={{fontSize:11,fontFamily: 'Roboto-Medium'}}>Certified ID Copy</Text>
-    <Text style={{fontSize:11,fontFamily: 'Roboto-Medium'}}>3 months Bank statments</Text>
+    <Text style={{fontSize:11,fontFamily: 'Roboto-Medium'}}>3 Months Bank Statment</Text>
     </View>
     <View style={{ flexDirection:'row',justifyContent:"space-around",paddingHorizontal:10,paddingVertical:5}}>
         <TouchableOpacity style = {{backgroundColor:'white',
@@ -442,9 +483,8 @@ style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
             </TouchableOpacity>
     </View>
 
-
     <View style = {{flexDirection:'row',justifyContent:"space-around",paddingHorizontal:10}}>
-    <Text style={{fontSize:11,fontFamily: 'Roboto-Medium'}}>latest pay Slip</Text>
+    <Text style={{fontSize:11,fontFamily: 'Roboto-Medium'}}>Latest Payslip</Text>
     <Text style={{fontSize:11,fontFamily: 'Roboto-Medium'}}>Proof of Residence</Text>
     </View>
     <View style={{ flexDirection:'row',justifyContent:"space-around",paddingHorizontal:10,paddingVertical:5}}>
@@ -466,17 +506,19 @@ style = {{color:'#797b7d',fontFamily: 'Roboto-Light',fontSize:15}} />
              {this.state.doc4name? <Text style ={{fontSize:11,fontWeight:'600',color:'#686e6a',textAlign:'center'}}>{this.state.doc4name.substring(0,12) }...</Text>:null}
             </TouchableOpacity>
     </View>
+    </View>
+    :null}
     <Text></Text>
    
  
-
-     <View style = {{flexDirection:'row',paddingHorizontal:20,paddingVertical:10}}>
+<Text></Text>
+     <View style = {{flexDirection:'row',paddingHorizontal:20,paddingVertical: 5,bottom:0,position:'absolute'}}>
 
      <TouchableOpacity onPress = {()=>{this.setState({term:!this.state.term})}} >
      <CheckBox checked={
         this.state.term} onPress ={()=>{this.setState({term:!this.state.term})}} color ='#575a5e'/>
      </TouchableOpacity>
-    <Text style = {{color:'#9ca0a6',paddingHorizontal:15,fontFamily: 'Roboto-Light',fontSize:15}}>Term & Condition</Text>
+    <Text style = {{color:'#9ca0a6',paddingHorizontal:15,fontFamily: 'Roboto-Light',fontSize:15}}>Terms & Conditions</Text>
      </View>
 
 </Content>
@@ -523,11 +565,10 @@ borderRadius:8
    
   height: 200 ,
   width: '70%',
-  borderWidth: 1,
+
   borderColor: '#1c4478',
   borderRadius:7,
   
- 
 },
  
 Alert_Title:{
@@ -543,22 +584,35 @@ Alert_Title:{
  
 Alert_Message:{
  
-    fontSize: 16, 
+
+    fontSize: 18, 
    
     textAlign: 'center',
     padding: 10,
-    height: '35%',
+   
     fontFamily:'Roboto-Light'
   },
  
-buttonStyle: {
+buttonStyleFull: {
     
   width:'100%',
   backgroundColor:'#1c4478',
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
- marginVertical:5,
+ margin:3,
+ 
+ 
+  borderRadius:7,
+},
+buttonStyle: {
+    
+  width:'48%',
+  backgroundColor:'#1c4478',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+ margin:3,
  
  
   borderRadius:7,
@@ -567,7 +621,7 @@ buttonStyle: {
 TextStyle:{
     color:'white',
     textAlign:'center',
-    fontSize: 23,
+    fontSize: 16,
     marginTop: -5, fontFamily:'Roboto-Medium'
     
 },

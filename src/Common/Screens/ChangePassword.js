@@ -17,7 +17,6 @@ import {
   TouchableWithoutFeedback,ActivityIndicator
 } from 'react-native';
 
-import AsyncStorage from '@react-native-community/async-storage';
 import { Container, Radio,Right,Text, Left,Input,Item ,Button, Footer,Header,Body,Title, Content,CheckBox} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Mytext from '../Component/Mytext';
@@ -25,22 +24,16 @@ import {toastr} from '../../Common/Screens/LoginScreen'
 
 
 export default class BChangePin extends React.Component {
-   
-
-    
-
     constructor(props){
-
         super(props);
-   
     this.state ={
-
 term:false,
 otp:'',
 newPin:'',
 confirmPin:'',
 userid:'',
-loading:false
+loading:false,
+session_id:''
     }
 }
 
@@ -71,8 +64,6 @@ return true;
 }
 
  ChangePass = async() =>{
- 
-  
   const { otp }  = this.state ;
   const userid   = this.props.navigation.state.params.id ;
   const { newPin }  = this.state ;
@@ -80,6 +71,7 @@ return true;
   formdata.append("otp",otp);
   formdata.append("npin",newPin);
   formdata.append("uid",userid);
+  formdata.append("session_id", this.props.navigation.state.params.session_id);
 if(this.validateInput()){
   await fetch('https://www.markupdesigns.org/paypa/api/changePin', {
     method: 'POST',
@@ -87,32 +79,20 @@ if(this.validateInput()){
      'Content-Type': 'multipart/form-data',
     },
     body: formdata
-   
   }).then((response) => response.json())
-        .then((responseJson) => {
-        
+        .then((responseJson) => {    
 this.setState({loading:false})
 if(responseJson.status ==="Success"){
           this.props.navigation.navigate('Login')
-
-          }
-        
+          } 
    else{
-
     alert(responseJson.msg)
    }
- 
-   
         }).catch((error) => {
           console.error(error);
         });
-   
-   
     }
-
 }
-
-
 
     render(){
   return (
@@ -140,7 +120,6 @@ if(responseJson.status ==="Success"){
       
       />
           </Item>
-
           <Mytext></Mytext>
           <Item  regular style ={styles.InputItem} >
 

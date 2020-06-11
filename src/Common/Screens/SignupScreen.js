@@ -28,7 +28,7 @@ import {
 import { Container, Radio,Right,Text, Left,Input,Item ,Button, Footer,Toast} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Mytext from '../Component/Mytext';
-
+const newBaseUrl = "https://www.markupdesigns.org/paypa/api/"
 import {toastr} from '../../Common/Screens/LoginScreen'
 export default class SignupScreen extends React.Component{
 
@@ -47,6 +47,7 @@ pin:'',
 loading:false,
 selected1:true,
 selected:false,
+status:''
 }
 }
 
@@ -59,12 +60,17 @@ validateInput = ()=>{
   const {type} = this.state;
 if(callNo ===null){
 
-toastr.showToast("Enter Call Number")
+toastr.showToast("Enter Cell Number")
 return false
 }
 else if(callNo.length<10){
 
-  toastr.showToast("Enter  Valid Call Number")
+  toastr.showToast("Enter  Valid Cell Number")
+  return false
+}
+else if(callConf ===null){
+
+  toastr.showToast("Enter Confirm Number")
   return false
 }
 else if (callNo !== callConf)
@@ -78,28 +84,32 @@ else if (pin ==="")
   toastr.showToast("Enter Pin Number")
   return false
 
+}else if (pin !=pinConf)
+{
+  toastr.showToast("Pin not matched")
+  return false
+
 }
+
 
 else
 this.setState({loading:true})
 return true;
 }
 
-
-
 UserSignupFunction = async() =>{
- 
-  
-
+console.warn("dx"+this.props.navigation.state.params.session_id)
   const {pin }  = this.state ;
-  const { callNo }  = this.state ;
+  let callNo   =  this.state.callNo ;
   const { type }  = this.state ;
   let formdata = new FormData();
   formdata.append("mobile",callNo);
   formdata.append("pin",pin);
   formdata.append("type",type);
+  formdata.append("session_id",this.props.navigation.state.params.session_id);
 if(this.validateInput()){
   await fetch('https://www.markupdesigns.org/paypa/api/registration', {
+
     method: 'POST',
     headers: {
      'Content-Type': 'multipart/form-data',
@@ -108,31 +118,46 @@ if(this.validateInput()){
    
   }).then((response) => response.json())
         .then((responseJson) => {
-          let data = responseJson['data']['id']
-          
 
-console.log("signup Response"+ JSON.stringify(responseJson))
-this.setState({loading:false})
-          this.props.navigation.navigate('OtpVerifiy',{ msg:responseJson.msg,
-            call:this.state.callNo,
-            pin:this.state.pin,
-            id:data,
-            type:this.props.navigation.state.params.type
-            })
-
-           
+          if(responseJson.status ==="Failure"){
+            alert(responseJson.msg)
+            this.setState({loading:false})
+          }
+          else{ let data = responseJson['data']['id']
         
-   
- 
+          console.log("signup Response"+ JSON.stringify(responseJson))
+          this.setState({loading:false})
+                    this.props.navigation.navigate('OtpVerifiy',{ msg:responseJson.msg,
+                      call: this.state.callNo,
+                      pin:this.state.pin,
+                      id:data,
+                      type:this.props.navigation.state.params.type
+                      })
+        }
    
         }).catch((error) => {
           console.error(error);
         });
-   
-   
     }
 
 }
+GetText = async()=>{
+  this.setState({loadiing:true})
+  let data = "disclaimer"
+    
+  await fetch(`${newBaseUrl}getStaticContent?val=${data}`).then((response) => response.json())
+        .then((responseJson) => {
+         this.setState({loading:false})
+          console.log("data" + JSON.stringify(responseJson))
+         
+         this.setState({status:responseJson.msg})
+           
+        }).catch((error) => {
+          console.error(error);
+        });  
+   }
+
+
  
 
   render(){
@@ -144,17 +169,14 @@ this.setState({loading:false})
   
       width: null,
       height: null,}} >
-        <ScrollView style={{flex: 1}}>
- <View style = {{alignItems:'center',justifyContent:'center'}}>
+        <ScrollView style={{flex: 1}}  showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
+
     <StatusBar barStyle="light-content" backgroundColor="#1c4478"/>
     <Text></Text>
- <Image source={require('../../img/logo/logo-login.png')}  style={{maxHeight:170,resizeMode: 'contain'}}/>
+ <Image source={require('../../img/logo/logo-login.png')}  style={{maxHeight:170,resizeMode: 'contain',alignSelf:'center'}}/>
    
- 
-
-
-    <Mytext></Mytext>
-    <View style ={{flexDirection:"row",paddingVertical:5}}>
+     <Mytext></Mytext>
+    <View style ={{flexDirection:"row",paddingVertical:5,alignSelf:'center',alignItems:'center'}}>
 <Radio  selected={this.state.selected1} style ={{paddingHorizontal:5,fontSize:5}} color="#acafb5" selectedColor	="#a8ada9"
 onPress ={()=>this.setState({type:0,selected2:false,selected1:true})}
 
@@ -170,7 +192,7 @@ onPress ={()=>this.setState({type:0,selected2:false,selected1:true})}
           <Image source={require('../../img/common/call21.png')} />
           <Input placeholderTextColor="#edf0ed" style = {{color:'#edf0ed',fontFamily: 'Roboto-Light',fontSize:15}}
              onChangeText={callNo => this.setState({callNo})}
-            keyboardType="numeric" placeholder='Enter Call Number' maxLength={10} />
+            keyboardType="numeric" placeholder='Enter Cell Number' maxLength={10} />
             
           </Item>
 
@@ -178,7 +200,7 @@ onPress ={()=>this.setState({type:0,selected2:false,selected1:true})}
          
           <Item  rounded style ={styles.InputItem} >
           <Image source={require('../../img/common/call21.png')} />
-            <Input placeholder='Enter Call Number' 
+            <Input placeholder='Confirm Cell Number' 
             placeholderTextColor="#edf0ed" style = {{color:'#edf0ed',fontFamily: 'Roboto-Light',fontSize:15}}
              onChangeText={callConf => this.setState({callConf})}
             keyboardType="numeric"  maxLength={10}/>
@@ -196,13 +218,13 @@ onPress ={()=>this.setState({type:0,selected2:false,selected1:true})}
 </Mytext>
 <Item  rounded style ={styles.InputItem} >
           <Image source={require('../../img/common/login21.png')} />
-            <Input placeholder='Enter Pin' 
+            <Input placeholder='Confirm Pin' 
             placeholderTextColor="#edf0ed" style = {{color:'#edf0ed',fontFamily: 'Roboto-Light',fontSize:15}}
             onChangeText={pinConf => this.setState({pinConf})}
             keyboardType="numeric" secureTextEntry={true} maxLength={5}/>
           </Item>
 <Mytext></Mytext>
-          <Button  rounded light style ={{paddingHorizontal:50,alignItems:'center',width:'75%'}}
+          <Button  rounded light style ={{paddingHorizontal:50,alignItems:'center',width:'75%',alignSelf:'center'}}
           
           onPress ={this.UserSignupFunction}
         
@@ -219,15 +241,24 @@ onPress ={()=>this.setState({type:0,selected2:false,selected1:true})}
 <Mytext>
 </Mytext>
 
-<View style = {{flexDirection:'row',bottom:10}}>
+<View style = {{flexDirection:'row',bottom:10,alignSelf:'center'}}>
   <Mytext style = {{color:'#dce0e6',fontSize:11,paddingVertical:2,paddingHorizontal:3}}> Already have an acount?</Mytext>
   <TouchableOpacity onPress ={()=> navigate('Login')} style ={{}}>
       <Mytext style = {{color:'#dce0e6',fontSize:13,}}>Login Now</Mytext></TouchableOpacity>
 </View>
 
  
- </View>
+
+
+   <Text style = {{color:'#e26d0e',fontSize:13,textAlign:'center',alignItems:'center',
+  bottom:0,paddingVertical:2}}>
+    Disclaimer
+    </Text>
+<Mytext  style = {{color:'#edf0ed',fontSize:12,textAlign:'center',alignItems:'center',paddingBottom:20}}> {this.props.navigation.state.params.msg}</Mytext>
+
+     
  </ScrollView>
+ 
 </ImageBackground>
   );
 };
@@ -246,6 +277,7 @@ const styles = StyleSheet.create({
   backgroundColor:'#23528b',
   width:'80%',
   borderColor:'#23528b',
+  alignSelf:'center'
 
 
  }

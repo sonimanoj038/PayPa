@@ -18,7 +18,7 @@ import {
    Animated,ImageBackground,ActivityIndicator,Alert,Dimensions
 } from 'react-native';
 
-
+const newBaseUrl = "https://www.markupdesigns.org/paypa/api/"
 import { Container, Radio,Right,Text, Left,Input,Item ,Button, Toast, Content} from 'native-base';
 
 import Mytext from '../Component/Mytext';
@@ -47,7 +47,9 @@ pin:'',
 userid:'',name:'',
 disablepin:true,
 WelcomeAgain:true,msg:'',
-Alert_Visibility:false
+Alert_Visibility:false,
+fcmToken:'',
+status:''
 }
 
 }
@@ -84,19 +86,23 @@ componentDidMount = async() => {
   const name= await AsyncStorage.getItem('name')
   const mobile = await AsyncStorage.getItem('mobile')
   const type = await AsyncStorage.getItem('type')
-
-this.setState({userid:uid,name:name,mobile:mobile,type:type})
+  const token = await AsyncStorage.getItem('fcmToken')
   
+console.log(uid,mobile,name,type,token)
+this.setState({userid:uid,name:name,mobile:mobile,type:type,token: token})
+  this.GetText()
  }
 UserLoginAgain = async() =>{
 
   const {pin }  = this.state ;
   const { mobile }  = this.state ;
   const {type} = this.state
+  const {token} = this.state
   let formdata = new FormData();
   formdata.append("mobile",mobile);
   formdata.append("pin",pin);
   formdata.append("type",type);
+  formdata.append("device_id",token);
 
   if(this.validateInput()){
     await fetch('https://www.markupdesigns.org/paypa/api/login', {
@@ -115,8 +121,9 @@ UserLoginAgain = async() =>{
   
    let data = responseJson['data']['id']
    let Process = responseJson['data']['status']  
-   let type = responseJson['data']['type']   
-      
+   let type = responseJson['data']['type'] 
+   let session_id = responseJson['data']['session_id']  
+   AsyncStorage.setItem('session_id',session_id)
      if(type ==='0' ){ 
        if(Process ===0){ this.props.navigation.navigate('Uregister',{
          id:data
@@ -127,7 +134,12 @@ UserLoginAgain = async() =>{
          }
       
        }
-
+       else if (this.state.type ==='2'){
+        this.props.navigation.navigate('Staff')    
+       
+       
+     
+      }
        else{
 
          if(Process ===0){
@@ -166,6 +178,21 @@ ok_Button=()=>{
 
 }
   
+GetText = async()=>{
+  this.setState({loadiing:true})
+  let data = "disclaimer"
+    
+  await fetch(`${newBaseUrl}getStaticContent?val=${data}`).then((response) => response.json())
+        .then((responseJson) => {
+         this.setState({loading:false})
+          console.log("data" + JSON.stringify(responseJson))
+         
+         this.setState({status:responseJson.msg})
+           
+        }).catch((error) => {
+          console.error(error);
+        });  
+   }
 
     render(){
       const {navigate} =this.props.navigation;
@@ -191,17 +218,15 @@ ok_Button=()=>{
  
  
                 <View style={styles.Alert_Main_View}>
+                <Image source={require('../../img/common/oops.png')} style={{maxHeight:50,resizeMode: 'contain'}} />
  
- 
-                    <Text style={styles.Alert_Title}>Opps..!</Text>
+                    <Text style={styles.Alert_Title}>Oops</Text>
  
                     <Text style={styles.Alert_Message}> {this.state.msg} </Text>
                   
                   
                 </View>
                 <View style={{flexDirection: 'row',height:'10%',width:'70%'}}>
- 
- 
  <TouchableOpacity 
      style={styles.buttonStyle} 
      onPress={this.ok_Button} 
@@ -249,14 +274,21 @@ ok_Button=()=>{
 
          
      </View >
-      <View elevation={2} style ={{ backgroundColor:'white',width:'55%',opacity:0.3,borderRadius:50,height:50,marginTop:-30
-    ,borderColor:'#e46c0b'}}>
+      <View elevation={2} style ={{ backgroundColor:'white',width:'55%',opacity:0.3,borderRadius:50,height:50,marginTop:-30,borderColor:'#e46c0b'}}>
 
 
       </View>
-         
+      <View style = {{flez:1, position: 'absolute',
+  bottom:0}}>
+      {this.state.status ===""?null:<Text style = {{color:'#e26d0e',fontSize:13,textAlign:'center',alignItems:'center',
+  bottom:0,paddingVertical:2}}>
+    Disclaimer
+    </Text>}
+<Mytext  style = {{color:'#edf0ed',fontSize:12,textAlign:'center',alignItems:'center',
+  bottom:0,paddingBottom:20}}> {this.state.status}</Mytext>
 
-
+      </View>
+       
 </ImageBackground>
 
   );
@@ -315,15 +347,12 @@ const styles = StyleSheet.create({
       
     width:'100%',
     backgroundColor:'#1c4478',
-      height: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
    marginVertical:5,
-   
-   
     borderRadius:7,
   },
-     
   TextStyle:{
       color:'white',
       textAlign:'center',
@@ -331,11 +360,6 @@ const styles = StyleSheet.create({
       marginTop: -5, fontFamily:'Roboto-Medium'
       
   },
-   
-  
- 
-  
- 
 });
 
 
@@ -346,7 +370,7 @@ export const toastr = {
       duration: 2000,
       position: 'bottom',
       textStyle: { textAlign: 'center' },
-      buttonText: 'Okay',
+     
     });
   },
 };

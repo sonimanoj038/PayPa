@@ -55,12 +55,11 @@ validateInput = ()=>{
   const {type} = this.state;
 if(callNo ===null){
 
-toastr.showToast("Enter Call Number")
+toastr.showToast("Enter Cell Number")
 return false
 }
 else if(callNo.length<10){
-
-  toastr.showToast("Enter  Valid Call Number")
+  toastr.showToast("Enter  Valid Cell Number")
   return false
 }
 
@@ -69,13 +68,11 @@ this.setState({loading:true})
 return true;
 }
 ForgotPass = async() =>{
- 
-  
-  const { callNo }  = this.state ;
+  let callNo   =  this.state.callNo ;
   const type   = this.props.navigation.state.params.type;
   let formdata = new FormData();
   formdata.append("mobile",callNo);
- 
+  formdata.append("session_id",this.props.navigation.state.params.session_id);
   formdata.append("type",type);
 if(this.validateInput()){
   await fetch('https://www.markupdesigns.org/paypa/api/forgotPassword', {
@@ -90,23 +87,18 @@ if(this.validateInput()){
         
 this.setState({loading:false})
 if(responseJson.status ==="Success"){
+  console.warn(responseJson)
           this.props.navigation.navigate('ForgotPin',{ msg:responseJson.msg,
             call:this.state.callNo,
             pin:this.state.pin,
             id:responseJson.uid,
             type:this.props.navigation.state.params.type
             })
-
           }
-        
-   
- 
    
         }).catch((error) => {
           console.error(error);
-        });
-   
-   
+        })
     }
 
 }
@@ -117,20 +109,15 @@ if(responseJson.status ==="Success"){
       justifyContent: "center",
       width: null,
       height: null,}} >
- <View style ={{ 
-      alignItems: 'center',}}>
+ <View style ={{ alignItems: 'center',justifyContent:'center'}}>
 
 <Image source={require('../../img/logo/logo-login.png')} style={{maxHeight:150,resizeMode: 'contain'}} />
-
-
-
-
 <Mytext></Mytext><Mytext></Mytext>
 <Item  rounded style ={styles.InputItem} >
 <Image source={require('../../img/common/call21.png')} />
 <Input placeholderTextColor="#edf0ed" style = {{color:'#edf0ed',fontFamily: 'Roboto-Light',fontSize:15}}
             onChangeText={callNo => this.setState({callNo})}
-            keyboardType="numeric" placeholder='Enter Call Number' maxLength={10} />
+            keyboardType="numeric" placeholder='Enter Cell Number' maxLength={10} />
           </Item>
           <Mytext></Mytext>
           
